@@ -9,3 +9,7 @@
 7. CURRICULUM.md와 README의 수업 수·목차를 갱신합니다. 실행 환경이 추가되면 실제 준비 방법과 제한도 적습니다.
 
 모든 학습 코드는 실제 런타임에서 실행해야 합니다. 새 GPU 기능이나 클라우드 서버는 구현·검증 전에는 연결되었다고 표시하지 않습니다.
+
+## 편집기 변경
+
+`npm ci` 후 `editor-src/editor.js`를 수정하고 `npm run build:editor` 및 `npm run test:editor`를 실행하세요. 원본·번들·lockfile·의존성 라이선스 고지를 함께 커밋합니다. 브라우저에서 실제 키 입력, 자동 저장 복원, Python/C++ 전환, 실행 단축키를 확인하세요.

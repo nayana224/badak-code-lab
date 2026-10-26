@@ -11,7 +11,7 @@ cd tensor-lab
 python3 server.py
 ```
 
-**http://127.0.0.1:8000** 을 엽니다. 다른 포트는 `python3 server.py --port 8001`을 사용합니다. npm 설치나 프런트엔드 빌드는 필요 없습니다.
+**http://127.0.0.1:8000** 을 엽니다. 다른 포트는 `python3 server.py --port 8001`을 사용합니다. 실행만 할 때는 npm 설치나 프런트엔드 빌드가 필요 없습니다. 문법 강조 편집기의 미리 빌드한 파일도 프로젝트에 포함되어 있습니다.
 
 ### C++과 PyTorch 준비
 
@@ -58,6 +58,31 @@ docker build -t badak-torch:2.8.0 .
 
 상단 **− / 비율 / ＋**로 글자 크기를 90~130% 범위에서 조절합니다. 비율을 누르면 기본값으로 돌아갑니다. 화면 폭·글자 크기에 따라 세로 배치로 전환합니다. 입력창은 코드 줄 수와 화면 높이에 맞춰 높이를 조정하고 아래 경계 드래그로도 조절할 수 있습니다.
 
+## 코드 편집기
+
+위쪽 참고 코드와 아래쪽 연습 입력창에 Python·C++ 문법 강조를 제공합니다. 키워드·문자열·숫자·주석·함수·타입을 색으로 구분하며 VS Code의 어두운 편집 화면에 가까운 색을 사용합니다.
+
+- Enter 자동 들여쓰기, Tab/Shift+Tab 선택 줄 들여쓰기·내어쓰기
+- 괄호·따옴표 자동 닫기, 대응 괄호 표시, 코드 접기, 현재 줄·줄 번호 표시
+- 기본 단어·지역 이름·실습 코드 조각 자동 완성 (Ctrl+Space, 제안은 Tab 또는 Enter로 적용)
+- Ctrl/⌘+F 코드 찾기·바꾸기, Ctrl/⌘+Z 실행 취소·다시 실행
+- Ctrl/⌘+Enter 실제 코드 실행, 줄·열 위치 표시
+- Esc를 누른 다음 Tab을 누르면 편집창에서 빠져나갈 수 있습니다.
+
+기존 작성 코드와 자동 저장은 그대로 유지됩니다. 언어를 바꾸면 해당 언어의 강조·들여쓰기로 전환하며 다른 수업의 내용을 실행 취소로 가져오지 않도록 편집 이력을 새로 시작합니다. 위쪽 예제는 읽기 전용입니다. 편집기 번들을 읽지 못하면 기본 입력창으로 계속 작성·실행할 수 있습니다.
+
+편집기는 CodeMirror를 로컬 번들로 포함합니다. Python/PyTorch 전체 환경을 분석하는 언어 서버(LSP)나 VS Code 전체 기능을 제공하는 것은 아닙니다. Python 런타임 최초 로딩은 기존처럼 CDN 연결이 필요합니다.
+
+편집기 소스를 변경하는 개발자만 다음 명령이 필요합니다(Node.js 22 이상).
+
+```bash
+npm ci
+npm run build:editor
+npm run test:editor
+```
+
+`editor-src/editor.js` 또는 패키지를 변경하면 `web/vendor/editor.js`와 `THIRD_PARTY_NOTICES.md`도 함께 재생성·커밋하세요. dependency 버전과 package-lock.json을 포함합니다. [CodeMirror 기본 구성](https://codemirror.net/examples/basic/)과 [Tab 접근성 안내](https://codemirror.net/examples/tab/)를 참고했습니다.
+
 ## 시각화의 동작과 지원 범위
 
 시각화는 코드를 실행한 후 기록된 스냅샷을 재생하는 방식입니다. 임의의 코드를 자동 분석하거나 실행을 중간에서 재개하는 디버거가 아닙니다. 코드가 바뀌면 이전 실행 기록이라는 안내를 표시하므로 다시 실행해야 그림이 갱신됩니다. 실행 오류가 나기 전까지 생성된 기록도 확인할 수 있습니다.
@@ -88,6 +113,8 @@ Docker는 호스트 커널을 공유합니다. 이 구성은 본인이 신뢰하
 
 - `web/lessons.js`, `extra-lessons.js`, `continuation-lessons.js`, `courses.js`: 수업·강좌·설명
 - `web/app.js`, `style.css`, `index.html`: UI와 저장·실행 연결
+- `web/editor-adapter.js`, `editor-src/`, `scripts/build-editor.mjs`: 편집기 연결과 재현 가능한 로컬 빌드
+- `web/vendor/editor.js`, `THIRD_PARTY_NOTICES.md`: 포함된 편집기 번들과 의존성 라이선스
 - `web/python-worker.js`, `trace-prelude.py`: 브라우저 Python과 실행 기록 도우미
 - `web/trace-player.js`: 검증된 실제 기록의 단계 재생
 - `server.py`, `cpp-prelude.hpp`: Docker 실행 API와 C++ 기록 도우미

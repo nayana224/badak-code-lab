@@ -1,6 +1,7 @@
 import { lessons } from './lessons.js';
 import { courses, courseId, explanations } from './courses.js';
 import { createTracePlayer } from './trace-player.js';
+import { createLessonEditor } from './editor-adapter.js';
 const $ = s => document.querySelector(s);
 const STORE = 'badak-lab-v1';
 let saved;
@@ -11,6 +12,7 @@ if (!saved.courseLast || typeof saved.courseLast !== 'object') saved.courseLast 
 if (!Array.isArray(saved.completed)) saved.completed = [];
 let lesson, busy = false, worker, timer, aborter, sequence = 0, capturedOutput='';
 const tracer=createTracePlayer($('#trace-panel'));
+const codeEditor=createLessonEditor({textarea:$('#editor'),reference:$('#reference-code'),wrapper:$('.editor-wrap'),gutter:$('#line-numbers'),onRun:()=>run()});
 const courseLessons=()=>lessons.filter(l=>courseId(l)===courseId(lesson));
 const save = () => { try {localStorage.setItem(STORE, JSON.stringify(saved));} catch {toast('브라우저 저장 공간이 부족합니다. 작성 코드를 복사해 보관하세요.');} };
 function toast(text) {$('#toast').textContent=text; $('#toast').style.display='block'; setTimeout(()=>$('#toast').style.display='none', 3500);}
@@ -20,7 +22,7 @@ function fitEditor() {
   const available=Math.max(260, Math.min(560, window.innerHeight * .6));
   $('.editor-wrap').style.height=Math.min(available, Math.max(260, (count+3)*lineHeight))+'px';
 }
-function lines() {fitEditor();$('#line-numbers').textContent=$('#editor').value.split('\n').map((_,i)=>i+1).join('\n'); $('#line-numbers').scrollTop=$('#editor').scrollTop;}
+function lines() {fitEditor();codeEditor.sync();$('#line-numbers').textContent=$('#editor').value.split('\n').map((_,i)=>i+1).join('\n'); $('#line-numbers').scrollTop=$('#editor').scrollTop;}
 function renderNav() {
   $('#lessons').replaceChildren(); let last='';
   courseLessons().forEach((l, index) => {
@@ -65,7 +67,7 @@ function selectLesson() {
   $('#visual-label').textContent=lesson.visual[0]; $('#visual-main').textContent=lesson.visual[1]; $('#visual-sub').textContent=lesson.visual[2];
   $('#hint-code').textContent=lesson.hint; $('#hint').open=false;
   $('#filename').textContent=lesson.id+'_practice.'+(lesson.runtime==='cpp'?'cpp':'py');
-  $('#reference-code').textContent=lesson.code.trimEnd()+(lesson.referenceComplete?'':'\n\n# 실습 완성 예시\n'+lesson.hint);
+  const referenceCode=lesson.code.trimEnd()+(lesson.referenceComplete?'':'\n\n# 실습 완성 예시\n'+lesson.hint);
   $('#restore-legacy').hidden=typeof saved.codes[lesson.id]!=='string' || !saved.codes[lesson.id].trim();
   $('#runtime-label').textContent=lesson.runtime==='cpp'?'● C++17 · 로컬 Docker CPU':lesson.runtime==='torch'?'● PyTorch · 로컬 Docker CPU':'● 내 브라우저 · '+(lesson.runtime==='numpy'?'Python + NumPy':'Python');
   $('#runtime-status').textContent=['torch','cpp'].includes(lesson.runtime)?'로컬 환경 확인 필요':'브라우저에서 실제 실행';
@@ -74,6 +76,7 @@ function selectLesson() {
   $('#prev').disabled=courseLessons().indexOf(lesson)===0; $('#next').disabled=courseLessons().indexOf(lesson)===courseLessons().length-1;
   $('#editor').placeholder=lesson.runtime==='cpp'?'// 위 코드를 참고해 직접 입력하세요.\n// 입력한 C++ 코드만 컴파일·실행됩니다.':'# 위 코드를 참고해 직접 입력하세요.\n# 입력한 코드만 실행됩니다.';
   $('#editor').setAttribute('aria-label',lesson.runtime==='cpp'?'직접 입력하는 C++ 코드 편집기':'직접 입력하는 Python 코드 편집기');
+  codeEditor.setLesson({language:lesson.runtime==='cpp'?'cpp':'python',referenceCode});
   renderNav();lines();
 }
 function setBusy(value) {busy=value; $('#run').disabled=value; $('#check').disabled=value; $('#reset').disabled=value; $('#restore-legacy').disabled=value; $('#stop').hidden=!value;}
@@ -94,7 +97,7 @@ function consumeOutput(text, stream='stdout') {
 async function run(check=false) {
   if(busy) return;
   const code=$('#editor').value;
-  if(!code.trim()) {$('#result').textContent='아래 입력창에 코드를 먼저 작성해 주세요. 위의 참고 코드는 실행되지 않습니다.'; $('#editor').focus(); return;}
+  if(!code.trim()) {$('#result').textContent='아래 입력창에 코드를 먼저 작성해 주세요. 위의 참고 코드는 실행되지 않습니다.'; codeEditor.focus(); return;}
   saved.practiceCodes[lesson.id]=code;save();tracer.reset(code);capturedOutput='';$('#output').textContent='';$('#output').className='';$('#result').textContent='';setBusy(true);
   $('#runtime-status').textContent='실행 준비 중…';const seq=++sequence;
   if(['torch','cpp'].includes(lesson.runtime)) {
@@ -128,11 +131,11 @@ async function run(check=false) {
 $('#editor').oninput=()=>{tracer.edited();saved.practiceCodes[lesson.id]=$('#editor').value;save();lines();};
 $('#editor').onscroll=()=>$('#line-numbers').scrollTop=$('#editor').scrollTop;
 $('#editor').onkeydown=e=>{if(e.key==='Tab'){e.preventDefault();const ed=e.target;ed.setRangeText('    ',ed.selectionStart,ed.selectionEnd,'end');ed.dispatchEvent(new Event('input'));}};
-document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run();}});
+document.addEventListener('keydown',e=>{if(e.defaultPrevented)return;if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();run();}});
 $('#show-trace').onclick=()=>$('#trace-panel').scrollIntoView({behavior:'smooth',block:'start'});
 $('#run').onclick=()=>run();$('#check').onclick=()=>run(true);$('#stop').onclick=()=>stop();
-$('#reset').onclick=()=>{if($('#editor').value && !confirm('이 수업의 입력창을 비우고 처음부터 연습할까요?')) return; tracer.reset();$('#editor').value='';saved.practiceCodes[lesson.id]='';save();lines();$('#result').textContent='';$('#editor').focus();};
-$('#restore-legacy').onclick=()=>{if($('#editor').value && !confirm('현재 입력을 이전 작성 코드로 바꿀까요?')) return; tracer.reset();$('#editor').value=saved.codes[lesson.id];saved.practiceCodes[lesson.id]=$('#editor').value;save();lines();$('#editor').focus();};
+$('#reset').onclick=()=>{if($('#editor').value && !confirm('이 수업의 입력창을 비우고 처음부터 연습할까요?')) return; tracer.reset();$('#editor').value='';saved.practiceCodes[lesson.id]='';save();lines();$('#result').textContent='';codeEditor.focus();};
+$('#restore-legacy').onclick=()=>{if($('#editor').value && !confirm('현재 입력을 이전 작성 코드로 바꿀까요?')) return; tracer.reset();$('#editor').value=saved.codes[lesson.id];saved.practiceCodes[lesson.id]=$('#editor').value;save();lines();codeEditor.focus();};
 $('#clear').onclick=()=>{$('#output').textContent='';$('#result').textContent='';};
 $('#prev').onclick=()=>location.hash=courseLessons()[courseLessons().indexOf(lesson)-1].id;
 $('#next').onclick=()=>location.hash=courseLessons()[courseLessons().indexOf(lesson)+1].id;
@@ -149,7 +152,7 @@ function applyFontSize() {
   $('#font-reset').setAttribute('aria-label', '글자 크기 '+Math.round(scale*100)+'%, 기본값으로');
   document.body.classList.toggle('large-text',scale>=1.2);
   $('#font-smaller').disabled=scale===.9; $('#font-larger').disabled=scale===1.3;
-  fitEditor();save();
+  fitEditor();codeEditor.sync();save();
 }
 function changeFont(direction){const sizes=[.9,1,1.1,1.2,1.3];const index=sizes.indexOf(saved.fontScale);saved.fontScale=sizes[Math.max(0,Math.min(sizes.length-1,index+direction))];applyFontSize();}
 $('#font-smaller').onclick=()=>changeFont(-1);

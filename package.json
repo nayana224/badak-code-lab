@@ -1,11 +1,28 @@
 {
   "name": "badak-code-lab",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "python3 server.py",
     "test": "python3 -m unittest discover -s tests -v",
-    "test:trace": "node tests/trace.test.js"
+    "test:trace": "node tests/trace.test.js",
+    "build:editor": "node scripts/build-editor.mjs",
+    "test:editor": "node tests/editor.test.js"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "6.20.4",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-cpp": "6.0.3",
+    "@codemirror/lang-python": "6.2.1",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/search": "6.7.2",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.15",
+    "@lezer/highlight": "1.2.5",
+    "codemirror": "6.0.2"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
   }
 }
