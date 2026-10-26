@@ -6,6 +6,8 @@
 - 로컬 작업 브랜치: codex/expand-curriculum (22개 수업 확장)
 - 커밋 작성자 메일: GitHub noreply 주소 사용
 
+현재 환경에서 `git push --dry-run origin main codex/expand-curriculum`이 정상 종료되어 두 브랜치의 전송 연결·인증을 확인했습니다. 이 검사는 실제 업로드를 수행하지 않았습니다.
+
 이 문서는 업로드 준비 안내입니다. 원격에 코드가 올라가는 시점은 실제 push 실행 후입니다.
 
 프로젝트 폴더에서 상태와 검사를 확인합니다.
