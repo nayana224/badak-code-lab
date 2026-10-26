@@ -1,0 +1,3 @@
+FROM gcc:13.5.0-bookworm
+USER 65534:65534
+WORKDIR /tmp

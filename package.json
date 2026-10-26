@@ -1,0 +1,11 @@
+{
+  "name": "badak-code-lab",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "python3 server.py",
+    "test": "python3 -m unittest discover -s tests -v",
+    "test:trace": "node tests/trace.test.js"
+  }
+}
