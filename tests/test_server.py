@@ -108,6 +108,18 @@ class CppAndTrace(unittest.TestCase):
         self.assertEqual(lines[-1], '100')
         self.assertEqual(frames[-1]['line'], 3)
 
+    def test_grader_does_not_add_trace_frames(self):
+        result = server.execute('def value(n):\n record("stack", values=[n], action="push", value=n)\n return n\nvalue(1)', 'for i in range(200): assert value(i) == i')
+        self.assertEqual(result['returncode'], 0, result)
+        self.assertEqual(result['stdout'].count('__BADAK_TRACE__'), 1)
+
+    def test_cpp_sort_snapshots(self):
+        result = server.execute('int main(){std::vector<int> v={3,1,2};std::swap(v[0],v[1]);record_sort(v,0,1,true);std::swap(v[1],v[2]);record_sort(v,1,2,true);}', runtime='cpp')
+        self.assertEqual(result['returncode'], 0, result)
+        frames = [json.loads(line.removeprefix('__BADAK_TRACE__')) for line in result['stdout'].splitlines()]
+        self.assertEqual(frames[-1]['values'], [1,2,3])
+        self.assertTrue(frames[-1]['swapped'])
+
     def test_cpp_real_compiler_error(self):
         result = server.execute('int main() { missing_name; }', runtime='cpp')
         self.assertNotEqual(result['returncode'], 0)

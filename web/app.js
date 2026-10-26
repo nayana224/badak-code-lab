@@ -57,7 +57,7 @@ function selectLesson() {
   $('#api-explanations').replaceChildren();
   explanations(lesson).forEach(([name, description])=>{const item=document.createElement('details');const title=document.createElement('summary');title.textContent=name;const text=document.createElement('p');text.textContent=description;item.append(title,text);$('#api-explanations').append(item);});
   tracer.reset();
-  $('#trace-panel').hidden=!['matrix-steps','stack','cpp-vector','cpp-search'].includes(lesson.id);
+  $('#trace-panel').hidden=!(lesson.trace || ['matrix-steps','stack','cpp-vector','cpp-search'].includes(lesson.id));
   $('#show-trace').hidden=$('#trace-panel').hidden;
   $('#crumb').textContent=lesson.group;
   $('#eyebrow').textContent=`LESSON ${String(courseLessons().indexOf(lesson)+1).padStart(2,'0')} · ${lesson.runtime==='torch'?'PYTORCH':lesson.runtime.toUpperCase()}`;

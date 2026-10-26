@@ -37,13 +37,13 @@ docker build -t badak-torch:2.8.0 .
 
 현재 클라우드 실행 서버와 GPU는 연결되어 있지 않습니다. 다른 컴퓨터에서 이 컴퓨터의 localhost 주소에 접속할 수 없습니다. 공개 사이트로 운영하려면 별도 서버, 인증·사용량 제한과 다중 사용자 코드 실행 격리 설계가 필요합니다. 프런트엔드만 정적으로 호스팅하면 C++·PyTorch API는 작동하지 않습니다.
 
-## 초기 강좌 · 9개 수업
+## 강좌 · 22개 수업
 
-- **Python (5):** 컨테이너 자료형 / NumPy shape / broadcasting / 행렬 곱 단계 시각화 / 클래스로 스택 만들기
-- **C++ (2):** vector·함수·누적 합 / 이진 탐색
-- **PyTorch (2):** tensor·dtype·평균 제곱 오차 / autograd·가중치 갱신
+- **Python (10):** 조건·반복 / 컨테이너 / 함수 / 클래스 / NumPy shape / broadcasting / 행렬 곱 / 스택 / 큐 / 이진 탐색
+- **C++ (6):** 변수·출력 / vector·함수 / 복사·참조 / 클래스 / 이진 탐색 / 버블 정렬
+- **PyTorch (6):** 텐서 / 자동 미분 / 기울기 누적·초기화 / 직접 구현한 학습 루프 / Linear·SGD / XOR 신경망
 
-강좌별 목차, 진도, 마지막 수업을 따로 유지합니다. 기존 수업의 ID와 저장된 코드를 유지했습니다.
+순서와 핵심 내용은 [전체 목차](CURRICULUM.md)를 참고하세요. 각 강좌의 기존 수업 ID와 저장된 코드·진도는 유지됩니다. 새 수업은 빈 연습 입력창으로 시작합니다.
 
 ## 학습 흐름
 
@@ -68,11 +68,11 @@ Python에는 실습실 전용 `record(kind, **state)`가 제공됩니다. 예:
 record("stack", values=[10, 20], action="push", value=20)
 ```
 
-실제로는 수업 예제처럼 현재 변수 값을 전달하세요. 지원 종류는 `matrix`, `stack`입니다. 행렬 예제는 `A`, `B`, `C`와 현재 인덱스·곱·누적 합을 전달합니다. 행렬은 최대 8×8, 스택/배열은 최대 32개 수치 원소를 화면에 표시합니다. 실행당 최대 128단계, 한 기록은 4KB로 제한합니다. 잘못된 형식은 경고 후 표시에서 제외합니다.
+실제로는 수업 예제처럼 현재 변수 값을 전달하세요. Python 지원 종류는 `matrix`, `stack`, `queue`, `search`, `training`입니다. 행렬 예제는 `A`, `B`, `C`와 현재 인덱스·곱·누적 합을 전달합니다. 행렬은 최대 8×8, 스택/배열은 최대 32개 수치 원소를 화면에 표시합니다. 실행당 최대 128단계, 한 기록은 4KB로 제한합니다. 잘못된 형식은 경고 후 표시에서 제외합니다.
 
-C++에는 `record_array(values, active, total)`, `record_search(values, left, right, mid, target)` 도우미를 제공합니다. 서버가 `cpp-prelude.hpp`를 소스 앞에 붙여 컴파일하며 `#line`으로 학습 코드의 행 번호를 보존합니다. 이 도우미는 표준 C++ 라이브러리 함수가 아닙니다. 별도 개발 환경에서 사용하려면 이 헤더도 포함해야 합니다.
+C++에는 `record_array(values, active, total)`, `record_search(values, left, right, mid, target)`, `record_sort(values, first, second, swapped)` 도우미를 제공합니다. 서버가 `cpp-prelude.hpp`를 소스 앞에 붙여 컴파일하며 `#line`으로 학습 코드의 행 번호를 보존합니다. 이 도우미는 표준 C++ 라이브러리 함수가 아닙니다. 별도 개발 환경에서 사용하려면 이 헤더도 포함해야 합니다.
 
-그림은 JSON으로 출력된 실제 변수 값만 사용합니다. NumPy 행렬 곱(12단계), 스택 push/pop, C++ 배열 누적 합, C++ 이진 탐색을 지원합니다. PyTorch 계산 그래프, 정렬·트리·그래프 탐색 시각화, 범용 자동 코드 추적은 아직 구현하지 않았습니다.
+그림은 JSON으로 출력된 실제 변수 값만 사용합니다. NumPy 행렬 곱, 스택, 큐, Python·C++ 이진 탐색, C++ 버블 정렬, PyTorch의 실제 학습 손실 곡선을 지원합니다. 손실 곡선은 기록된 epoch·loss·파라미터·선택적 정확도를 표시하고 수치 표를 제공합니다. PyTorch의 연산 그래프, 트리·그래프 탐색, 범용 자동 코드 추적은 아직 구현하지 않았습니다. 실습 검사에서 호출한 함수의 기록은 그림에 추가하지 않습니다.
 
 ## 실행 제한
 
@@ -86,7 +86,7 @@ Docker는 호스트 커널을 공유합니다. 이 구성은 본인이 신뢰하
 
 ## 파일
 
-- `web/lessons.js`, `extra-lessons.js`, `courses.js`: 수업·강좌·설명
+- `web/lessons.js`, `extra-lessons.js`, `continuation-lessons.js`, `courses.js`: 수업·강좌·설명
 - `web/app.js`, `style.css`, `index.html`: UI와 저장·실행 연결
 - `web/python-worker.js`, `trace-prelude.py`: 브라우저 Python과 실행 기록 도우미
 - `web/trace-player.js`: 검증된 실제 기록의 단계 재생
@@ -97,7 +97,7 @@ Docker는 호스트 커널을 공유합니다. 이 구성은 본인이 신뢰하
 ```bash
 # API 검사 (Docker 통합 검사는 생략)
 python3 -m unittest discover -s tests -v
-# 두 이미지가 준비된 환경에서 전체 통합 검사
+# 두 이미지와 Node.js가 준비된 환경에서 전체 수업을 포함한 통합 검사
 BADAK_DOCKER_TEST=1 python3 -m unittest discover -s tests -v
 ```
 
@@ -106,3 +106,9 @@ BADAK_DOCKER_TEST=1 python3 -m unittest discover -s tests -v
 확인된 동작과 한계는 `VERIFICATION.md`를 참고하세요.
 
 참고: [Pyodide worker](https://pyodide.org/en/stable/usage/webworker.html), [PyTorch 설치](https://pytorch.org/get-started/previous-versions/), [Docker 공식 GCC 이미지](https://hub.docker.com/_/gcc).
+
+## GitHub와 브랜치
+
+공개 저장소: https://github.com/nayana224/badak-code-lab
+
+로컬 `main`에는 기존 MVP를, `codex/expand-curriculum`에는 22개 수업 확장을 정리합니다. 최초 업로드는 [push 준비 안내](PUSH_PREPARATION.md)를 참고하세요. 로컬 실행과 GitHub 업로드, 공개 웹사이트 배포는 각각 별도 단계입니다. 이 저장소를 만든 것만으로 사이트가 인터넷에 호스팅되지는 않습니다.

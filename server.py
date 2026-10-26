@@ -77,6 +77,7 @@ def execute(code, check='', runtime='torch'):
             payload = (f'_scope = {{"__name__": "__main__"}}\n'
                        f'exec({TRACE_PRELUDE!r}, _scope)\n'
                        f'exec(compile({code!r}, "lesson.py", "exec"), _scope)\n'
+                       f'_scope["_lab_record_enabled"] = False\n'
                        f'exec(compile({check!r}, "exercise.py", "exec"), _scope)\n')
         try:
             proc.stdin.write(payload.encode())

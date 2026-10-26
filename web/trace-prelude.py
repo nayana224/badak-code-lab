@@ -2,10 +2,13 @@
 import json as _lab_json
 import sys as _lab_sys
 _lab_trace_count = 0
+_lab_record_enabled = True
 
 def record(kind, **state):
     """Record the actual values passed by learner code (at most 128 frames)."""
     global _lab_trace_count
+    if not _lab_record_enabled:
+        return
     if _lab_trace_count >= 128:
         raise ValueError('시각화는 실행당 128단계까지 기록합니다. 입력 크기를 줄이세요.')
     frame = dict(state, kind=kind, line=_lab_sys._getframe(1).f_lineno)

@@ -27,7 +27,10 @@ self.onmessage = async ({data}) => {
     globals = pyodide.runPython('dict(__name__="__main__")');
     await pyodide.runPythonAsync(await tracePrelude, {globals});
     await pyodide.runPythonAsync(code, {globals});
-    if (check) await pyodide.runPythonAsync(check, {globals});
+    if (check) {
+      globals.set("_lab_record_enabled", false);
+      await pyodide.runPythonAsync(check, {globals});
+    }
     self.postMessage({type:'done', passed:!!check});
   } catch (error) {
     self.postMessage({type:'error', text:error.message});

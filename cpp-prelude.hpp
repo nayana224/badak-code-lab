@@ -21,3 +21,11 @@ static int _lab_count = 0;
 }
 #define record_array(values, active, total) _lab_array(values, active, total, __LINE__)
 #define record_search(values, left, right, mid, target) _lab_search(values, left, right, mid, target, __LINE__)
+[[maybe_unused]] static void _lab_sort(const std::vector<int>& values, int first, int second, bool swapped, int line) {
+    _lab_begin();
+    if (values.size() > 32) throw std::runtime_error("sort trace limit: 32 items");
+    std::cout << "__BADAK_TRACE__{\"kind\":\"sort\",\"values\":[";
+    for (size_t i=0; i<values.size(); ++i) { if(i) std::cout << ','; std::cout << values[i]; }
+    std::cout << "],\"first\":" << first << ",\"second\":" << second << ",\"swapped\":" << (swapped ? "true" : "false") << ",\"line\":" << line << "}" << std::endl;
+}
+#define record_sort(values, first, second, swapped) _lab_sort(values, first, second, swapped, __LINE__)

@@ -1,7 +1,7 @@
 export const courses = [
- {id:'python',name:'Python',description:'자료형부터 NumPy와 자료구조까지',location:'내 브라우저 · 노트북 CPU',detail:'설치 없이 Python·NumPy를 브라우저에서 실행합니다. 작은 행렬·자료구조 실습에 GPU는 필요하지 않습니다.'},
- {id:'cpp',name:'C++',description:'실제 컴파일과 알고리즘 추적',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'코드를 로컬 Docker의 C++17 컴파일러로 컴파일·실행합니다. 현재는 클라우드 서버가 연결되어 있지 않습니다. GPU는 필요하지 않습니다.'},
- {id:'torch',name:'PyTorch',description:'텐서부터 첫 역전파까지',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'실제 PyTorch CPU에서 실행합니다. GPU를 사용하지 않습니다. 클라우드·GPU 실행은 아직 연결되어 있지 않습니다.'}
+ {id:'python',name:'Python',description:'기초·함수·클래스·자료구조·탐색',location:'내 브라우저 · 노트북 CPU',detail:'설치 없이 Python·NumPy를 브라우저에서 실행합니다. 작은 행렬·자료구조 실습에 GPU는 필요하지 않습니다.'},
+ {id:'cpp',name:'C++',description:'기초·참조·클래스·정렬·탐색',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'코드를 로컬 Docker의 C++17 컴파일러로 컴파일·실행합니다. 현재는 클라우드 서버가 연결되어 있지 않습니다. GPU는 필요하지 않습니다.'},
+ {id:'torch',name:'PyTorch',description:'텐서·자동 미분·학습 루프·신경망',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'실제 PyTorch CPU에서 실행합니다. GPU를 사용하지 않습니다. 클라우드·GPU 실행은 아직 연결되어 있지 않습니다.'}
 ];
 export const courseId = lesson => ['cpp','torch'].includes(lesson.runtime)?lesson.runtime:'python';
 export function explanations(lesson) {
