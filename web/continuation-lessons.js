@@ -35,7 +35,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "for는 값을 하나씩 살펴보고 if는 조건을 고릅니다. 들여쓰기는 실행 범위를 결정합니다.",
     "check": "assert threshold == 80 and passed == [91], \"예제 점수에서 기준을 80으로 바꾸세요.\""
   },
   {
@@ -74,7 +74,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "함수의 반환값과 화면 출력은 다릅니다. 입력의 경계를 정하고 계산 결과를 return으로 전달하세요.",
     "check": "assert result == 25, \"새 리스트의 평균을 result에 저장하세요.\"\nassert mean([1, 3]) == 2 and mean([-2, 2]) == 0, \"입력에 따라 평균을 계산해야 합니다.\"\ntry:\n    mean([])\nexcept ValueError:\n    pass\nelse:\n    raise AssertionError(\"빈 리스트에는 ValueError를 발생시키세요.\")"
   },
   {
@@ -113,7 +113,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "클래스는 설계이고 인스턴스는 각자의 상태를 가진 객체입니다. self.value는 현재 객체의 값입니다.",
     "check": "assert a.value == 7 and b.value == 10, \"a에만 2를 더하세요.\"\nprobe = Counter(3)\nassert probe.add(2) == 5 and probe.value == 5, \"add는 객체의 상태와 반환값을 함께 갱신해야 합니다.\""
   },
   {
@@ -152,7 +152,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": true,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "큐는 먼저 들어온 값부터 꺼냅니다. append와 popleft의 방향을 스택의 append·pop과 비교하세요.",
     "check": "assert first == 10 and second == 20 and list(queue) == [30], \"popleft()로 앞에서 꺼내세요.\""
   },
   {
@@ -191,7 +191,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": true,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "이진 탐색에는 정렬된 입력이 필요합니다. mid를 범위에서 제외하고 빈 범위가 되었을 때 종료하세요.",
     "check": "assert target == 10 and found == 4, \"목표를 10으로 바꾸세요.\"\nassert binary_search([], 1) == -1 and binary_search(values, 9) == -1, \"없는 값은 -1을 반환하세요.\"\nassert binary_search(values, 2) == 0 and binary_search(values, 14) == 6, \"양 끝 인덱스를 확인하세요.\""
   },
   {
@@ -230,7 +230,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "소스는 먼저 컴파일되고 그다음 실행됩니다. 컴파일 오류와 실행 오류를 구분해 읽으세요.",
     "expectedOutput": "바닥부터: 4 / 5"
   },
   {
@@ -269,7 +269,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "복사는 독립적인 객체를 만들고 참조는 기존 객체를 가리킵니다. 함수가 원본을 바꾸는지 인자 선언에서 확인하세요.",
     "expectedOutput": "15 15"
   },
   {
@@ -308,7 +308,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "객체의 상태는 private에 두고 동작은 public 메서드로 제공합니다. 객체마다 상태는 독립적입니다.",
     "expectedOutput": "7 10"
   },
   {
@@ -347,7 +347,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": true,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "버블 정렬은 인접한 값을 반복 비교합니다. 작은 입력의 비교 횟수를 세어 O(n²) 비용을 이해하세요.",
     "expectedOutput": "1 2 3 4 5"
   },
   {
@@ -386,7 +386,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": false,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "새로운 forward 그래프를 만드는 것과 기존 .grad를 비우는 것은 별개입니다. 학습 단계마다 초기화 위치를 확인하세요.",
     "check": "assert w.item() == 3 and first_grad == 6 and second_grad == 12 and third_grad == 6, \"새 그래프의 기울기도 .grad에는 누적됩니다. 초기화 위치를 확인하세요.\""
   },
   {
@@ -425,7 +425,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": true,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "예측→손실→역전파→갱신→기울기 초기화가 한 단계입니다. 갱신 후 손실은 새 forward로 다시 계산합니다.",
     "check": "assert steps == 80 and final_loss.item() < 1e-6, \"80단계 학습 후 손실을 확인하세요.\"\nassert abs(w.item()-2) < .01 and abs(b.item()-1) < .01, \"w와 b를 올바르게 갱신하세요.\"\nassert final_loss.item() < history[0], \"초기 손실보다 작아야 합니다.\""
   },
   {
@@ -464,7 +464,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": true,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "optimizer는 backward를 대신하지 않습니다. zero_grad, backward, step의 역할과 순서를 구분하세요.",
     "check": "assert isinstance(model, nn.Linear) and isinstance(optimizer, torch.optim.SGD), \"Linear와 SGD를 사용하세요.\"\nassert steps == 80 and final_loss.item() < 1e-6, \"80단계의 손실을 확인하세요.\"\nassert abs(model.weight.item()-2) < .01 and abs(model.bias.item()-1) < .01, \"가중치와 편향을 학습하세요.\""
   },
   {
@@ -507,7 +507,7 @@ export const continuationLessons = [
       ]
     ],
     "trace": true,
-    "takeaway": "직접 입력한 코드를 실행한 다음 입력값을 바꾸어 같은 원리가 성립하는지 확인하세요.",
+    "takeaway": "비선형 활성화 함수가 모델의 표현력을 바꿉니다. 네 학습 점에서의 성공이 새로운 데이터의 성능을 보장하지는 않습니다.",
     "check": "assert isinstance(model, nn.Sequential) and any(isinstance(layer, nn.Tanh) for layer in model), \"비선형 활성화 함수를 유지하세요.\"\nassert steps == 300 and labels.flatten().tolist() == [0,1,1,0], \"네 점을 올바르게 분류하세요.\"\nassert final_loss.item() < .01 and accuracy == 1., \"최종 손실과 정확도를 확인하세요.\""
   }
 ];
