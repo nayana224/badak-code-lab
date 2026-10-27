@@ -2,8 +2,6 @@
 
 Python, C++, PyTorch를 한국어로 배우는 실습 사이트입니다. 설명과 예제 코드를 읽고 직접 입력해 실행하며, 일부 수업은 실제 실행 결과를 단계별로 시각화합니다. GPU는 필요하지 않습니다.
 
-> 현재 학습 사이트와 상세 문서는 `codex/expand-curriculum` 브랜치에 있습니다. 아래 명령은 해당 버전을 내려받습니다.
-
 ## 시작하기
 
 **필요한 것:** Python 3.10 이상, 최신 웹 브라우저, Git. Python·NumPy의 첫 실행에는 인터넷이 필요합니다. C++과 PyTorch 수업에는 Docker도 필요합니다.
@@ -11,7 +9,7 @@ Python, C++, PyTorch를 한국어로 배우는 실습 사이트입니다. 설명
 터미널에서 다음 명령을 실행합니다.
 
 ```bash
-git clone --branch codex/expand-curriculum https://github.com/nayana224/badak-code-lab.git
+git clone https://github.com/nayana224/badak-code-lab.git
 cd badak-code-lab
 python3 server.py
 ```
@@ -28,10 +26,10 @@ Python·NumPy 수업은 브라우저에서 실행합니다. C++은 GCC 13 기반
 
 ## 자세히 보기
 
-- [문제 해결: 사이트 연결, Docker, Python 실행](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/docs/TROUBLESHOOTING.md)
-- [전체 학습 목차](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/CURRICULUM.md)
-- [학습 확장 계획: Attention과 Transformer](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/docs/ROADMAP.md)
-- [사용 방법, 편집기, 시각화와 실행 제한](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/docs/USAGE.md)
-- [개발 및 검사 방법](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/docs/DEVELOPMENT.md)
-- [확인된 동작과 한계](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/VERIFICATION.md)
-- [오픈소스 의존성 고지](https://github.com/nayana224/badak-code-lab/blob/codex/expand-curriculum/THIRD_PARTY_NOTICES.md)
+- [문제 해결: 사이트 연결, Docker, Python 실행](docs/TROUBLESHOOTING.md)
+- [전체 학습 목차](CURRICULUM.md)
+- [학습 확장 계획: Attention과 Transformer](docs/ROADMAP.md)
+- [사용 방법, 편집기, 시각화와 실행 제한](docs/USAGE.md)
+- [개발 및 검사 방법](docs/DEVELOPMENT.md)
+- [확인된 동작과 한계](VERIFICATION.md)
+- [오픈소스 의존성 고지](THIRD_PARTY_NOTICES.md)

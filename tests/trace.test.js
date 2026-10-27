@@ -23,3 +23,22 @@ test('rejects invalid search bounds and array active positions',()=>{
  assert.equal(validateFrame({kind:'search',line:1,values:[1,2],left:1,right:0,mid:1,target:1}),false);
  assert.equal(validateFrame({kind:'array',line:1,values:[1],active:1,total:1}),false);
 });
+test('accepts queue, sort, and real training snapshots',()=>{
+ assert.equal(validateFrame({kind:'queue',line:5,values:[30],action:'dequeue',value:20}),true);
+ assert.equal(validateFrame({kind:'sort',line:14,values:[1,5,4],first:0,second:1,swapped:true}),true);
+ assert.equal(validateFrame({kind:'training',line:14,epoch:80,loss:1.5e-12,weights:[2,1]}),true);
+ assert.equal(validateFrame({kind:'training',line:14,epoch:300,loss:.001,weights:[],accuracy:1}),true);
+});
+test('rejects invalid queue, sort and training snapshots',()=>{
+ assert.equal(validateFrame({kind:'queue',line:5,values:[1],action:'push',value:1}),false);
+ assert.equal(validateFrame({kind:'sort',line:14,values:[1,2],first:0,second:2,swapped:true}),false);
+ for(const changes of [{loss:-1},{epoch:-1},{accuracy:1.1},{loss:NaN},{weights:['bad']}])assert.equal(validateFrame({kind:'training',line:1,epoch:0,loss:1,weights:[],...changes}),false);
+});
+test('attention records require compatible, finite bounded matrices',()=>{
+ const frame={kind:'attention',line:12,scores:[[1,0],[0,1]],weights:[[0.7,0.3],[0.3,0.7]],result:[[1.6,2.6],[2.4,3.4]]};
+ assert.equal(validateFrame(frame),true);
+ assert.equal(validateFrame({...frame,weights:[[1],[0]]}),false);
+ assert.equal(validateFrame({...frame,result:[[1,2]]}),false);
+ assert.equal(validateFrame({...frame,scores:[[Infinity,0],[0,1]]}),false);
+ assert.equal(validateFrame({...frame,weights:[[1,'x'],[0,1]]}),false);
+});
