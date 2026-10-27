@@ -34,3 +34,11 @@ test('rejects invalid queue, sort and training snapshots',()=>{
  assert.equal(validateFrame({kind:'sort',line:14,values:[1,2],first:0,second:2,swapped:true}),false);
  for(const changes of [{loss:-1},{epoch:-1},{accuracy:1.1},{loss:NaN},{weights:['bad']}])assert.equal(validateFrame({kind:'training',line:1,epoch:0,loss:1,weights:[],...changes}),false);
 });
+test('attention records require compatible, finite bounded matrices',()=>{
+ const frame={kind:'attention',line:12,scores:[[1,0],[0,1]],weights:[[0.7,0.3],[0.3,0.7]],result:[[1.6,2.6],[2.4,3.4]]};
+ assert.equal(validateFrame(frame),true);
+ assert.equal(validateFrame({...frame,weights:[[1],[0]]}),false);
+ assert.equal(validateFrame({...frame,result:[[1,2]]}),false);
+ assert.equal(validateFrame({...frame,scores:[[Infinity,0],[0,1]]}),false);
+ assert.equal(validateFrame({...frame,weights:[[1,'x'],[0,1]]}),false);
+});

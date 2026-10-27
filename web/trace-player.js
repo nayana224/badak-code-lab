@@ -6,6 +6,7 @@ const matrix = x => Array.isArray(x) && x.length>0 && x.length<=8 && x.every(row
 export function validateFrame(frame) {
  if(!frame || !integer(frame.line) || frame.line<1 || frame.line>10000) return false;
  if(frame.kind==='matrix') return matrix(frame.left)&&matrix(frame.right)&&matrix(frame.result)&&frame.left[0].length===frame.right.length&&frame.result.length===frame.left.length&&frame.result[0].length===frame.right[0].length&&['row','col','inner'].every(k=>integer(frame[k])&&frame[k]>=0)&&frame.row<frame.left.length&&frame.col<frame.right[0].length&&frame.inner<frame.right.length&&number(frame.product)&&number(frame.total);
+ if(frame.kind==='attention') return matrix(frame.scores)&&matrix(frame.weights)&&matrix(frame.result)&&frame.scores.length===frame.weights.length&&frame.scores[0].length===frame.weights[0].length&&frame.result.length===frame.weights.length;
  if(frame.kind==='training') return integer(frame.epoch)&&frame.epoch>=0&&frame.epoch<=1e7&&number(frame.loss)&&frame.loss>=0&&values(frame.weights)&&(frame.accuracy===undefined||(number(frame.accuracy)&&frame.accuracy>=0&&frame.accuracy<=1));
  if(frame.kind==='queue') return values(frame.values)&&['enqueue','dequeue'].includes(frame.action)&&number(frame.value);
  if(frame.kind==='sort') return values(frame.values)&&['first','second'].every(k=>integer(frame[k])&&frame[k]>=0&&frame[k]<frame.values.length)&&typeof frame.swapped==='boolean';
@@ -45,6 +46,12 @@ export function createTracePlayer(root) {
    scene.append(make('p',`epoch ${f.epoch} · 실제 loss = ${fmt(f.loss)}`+(f.accuracy===undefined?'':` · 정확도 ${fmt(f.accuracy*100)}%`),'trace-description'));
    if(f.weights.length)scene.append(make('p','기록된 파라미터: ['+f.weights.map(fmt).join(', ')+']','trace-description'));
    const data=make('details',undefined,'loss-data');data.append(make('summary','손실 곡선의 실제 수치 보기'));const table=make('table');const header=make('tr');header.append(make('th','epoch'),make('th','loss'));table.append(header);history.forEach(v=>{const row=make('tr');row.append(make('td',String(v.epoch)),make('td',String(v.loss)));table.append(row);});data.append(table);scene.append(data);
+  } else if(f.kind==='attention') {
+   const boxes=make('div',undefined,'matrix-scene');
+   const draw=(label,data)=>{const box=make('div',undefined,'matrix-box');box.append(make('strong',label));const grid=make('div',undefined,'matrix-grid');grid.style.gridTemplateColumns=`repeat(${data[0].length}, minmax(32px,1fr))`;data.forEach(row=>row.forEach(v=>grid.append(make('span',fmt(v),'matrix-cell'))));box.append(grid);return box;};
+   boxes.append(draw('점수 QKᵀ / √d',f.scores),make('b','→'),draw('가중치 softmax',f.weights),make('b','→'),draw('출력 weights @ V',f.result));
+   scene.append(boxes,make('p','입력한 코드가 기록한 실제 행렬입니다. 행은 query 순서입니다. 숫자는 화면에서 반올림됩니다.','trace-description'));
+   const details=make('details',undefined,'loss-data');details.append(make('summary','실제 수치 보기'));const pre=make('pre',JSON.stringify({scores:f.scores,weights:f.weights,result:f.result},null,2));details.append(pre);scene.append(details);
   } else if(f.kind==='matrix') {
    const boxes=make('div',undefined,'matrix-scene');
    const draw=(label,data,highlight)=>{const box=make('div',undefined,'matrix-box');box.append(make('strong',label));const grid=make('div',undefined,'matrix-grid');grid.style.gridTemplateColumns=`repeat(${data[0].length}, minmax(32px,1fr))`;data.forEach((row,i)=>row.forEach((v,j)=>grid.append(make('span',fmt(v),highlight(i,j)?'matrix-cell active':'matrix-cell'))));box.append(grid);return box;};

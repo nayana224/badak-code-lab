@@ -10,12 +10,31 @@ import server
 
 @unittest.skipUnless(os.environ.get('BADAK_DOCKER_TEST') == '1' and shutil.which('node'), 'Requires both Docker images and Node.js')
 class Curriculum(unittest.TestCase):
+    def test_attention_matches_torch_reference(self):
+        code = '''import math
+import torch
+import torch.nn.functional as F
+Q = torch.tensor([[1., 0.], [0., 1.]])
+K = torch.tensor([[1., 0.], [0., 1.]])
+V = torch.tensor([[2., 2.], [3., 4.]])
+scores = Q @ K.T / math.sqrt(Q.shape[-1])
+weights = torch.softmax(scores, dim=-1)
+assert torch.allclose(weights @ V, F.scaled_dot_product_attention(Q, K, V), atol=1e-6)
+mask = torch.triu(torch.ones_like(scores, dtype=torch.bool), diagonal=1)
+masked = torch.softmax(scores.masked_fill(mask, float('-inf')), dim=-1) @ V
+assert torch.allclose(masked, F.scaled_dot_product_attention(Q, K, V, is_causal=True), atol=1e-6)
+print('attention verified')
+'''
+        result = server.execute(code, runtime='torch')
+        self.assertEqual(result['returncode'], 0, result)
+        self.assertEqual(result['stdout'].strip(), 'attention verified')
+
     def test_complete_lesson_solutions(self):
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(['node', '--input-type=module', '-e', 'import {lessons} from "./web/lessons.js";process.stdout.write(JSON.stringify(lessons));'], cwd=root, check=True, capture_output=True, text=True, timeout=10)
         lessons = json.loads(result.stdout)
-        self.assertEqual(len(lessons), 70)
-        self.assertEqual(len({lesson['id'] for lesson in lessons}), 70)
+        self.assertEqual(len(lessons), 74)
+        self.assertEqual(len({lesson['id'] for lesson in lessons}), 74)
         for lesson in lessons:
             with self.subTest(lesson=lesson['id']):
                 for field in ('title','concept','predict','task','hint','takeaway','code'):

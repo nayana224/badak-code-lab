@@ -1,5 +1,17 @@
 // Fixed worked examples; the trace panel separately shows the learner's actual execution.
 const examples = {
+ 'torch-softmax': {
+  formula:'<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="아이번째 softmax 값은 이의 지수 에스 아이를 모든 이의 지수 에스 제이의 합으로 나눈 값"><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><mfrac><msup><mi>e</mi><msub><mi>s</mi><mi>i</mi></msub></msup><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mi>e</mi><msub><mi>s</mi><mi>j</mi></msub></msup></mrow></mfrac></math>',
+  meaning:'각 점수의 지수값을 모든 점수의 지수값 합으로 나눕니다. 같은 상수를 모든 점수에서 빼도 비율은 변하지 않습니다.',
+  worked:'세 점수가 모두 같으면 각 가중치는 1/3입니다.',
+  code:'최댓값을 뺀 shifted의 지수값을 계산하고 합으로 나눕니다.'
+ },
+ 'torch-attention': {
+  formula:'<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="어텐션은 큐 케이 전치의 곱을 디의 제곱근으로 나눈 것에 소프트맥스를 적용하고 브이를 곱한 값"><mi>Attention</mi><mo>(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo>)</mo><mo>=</mo><mi>softmax</mi><mo>(</mo><mfrac><mrow><mi>Q</mi><msup><mi>K</mi><mi>T</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>)</mo><mi>V</mi></math>',
+  meaning:'Q와 K의 행마다 내적한 점수에 행별 softmax를 적용해 가중치를 만든 뒤 V를 가중합합니다. dₖ는 query와 key의 특성 수입니다.',
+  worked:'이 수업에서 Q와 K는 2×2이므로 점수와 가중치는 2×2이며 출력도 2×2입니다.',
+  code:'scores, weights, output을 순서대로 계산합니다. 실행 후 실제 행렬은 시각화에서 확인합니다.'
+ },
  'torch-loss-mean': {
   formula:'<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="손실은 예측과 목표의 차이를 제곱한 값의 평균"><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo>(</mo><msub><mover><mi>y</mi><mo>ˆ</mo></mover><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></math>',
   meaning:'예측과 목표의 차이를 각 원소마다 제곱하고 전체 원소 수 n으로 나눕니다.',
