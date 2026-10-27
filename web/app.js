@@ -89,7 +89,7 @@ function selectLesson() {
   };
   const referenceCode=lesson.solution || (exampleAnswers[lesson.id] ? exampleAnswers[lesson.id](lesson.code) : lesson.code.trimEnd()+(lesson.referenceComplete?'':'\n\n# 실습 완성 예시\n'+lesson.hint));
   $('#restore-legacy').hidden=typeof saved.codes[lesson.id]!=='string' || !saved.codes[lesson.id].trim();
-  $('#runtime-label').textContent=lesson.runtime==='cpp'?'● C++17 · 로컬 Docker CPU':lesson.runtime==='torch'?'● PyTorch · 로컬 Docker CPU':'● 내 브라우저 · '+(lesson.runtime==='numpy'?'Python + NumPy':'Python');
+  $('#runtime-label').textContent=lesson.runtime==='cpp'?'● C++20 · 로컬 Docker CPU':lesson.runtime==='torch'?'● PyTorch · 로컬 Docker CPU':'● 내 브라우저 · '+(lesson.runtime==='numpy'?'Python + NumPy':'Python');
   $('#runtime-status').textContent=['torch','cpp'].includes(lesson.runtime)?'로컬 환경 확인 필요':'브라우저에서 실제 실행';
   $('#editor').value=typeof saved.practiceCodes[lesson.id]==='string'?saved.practiceCodes[lesson.id]:'';
   $('#output').textContent='아직 실행하지 않았습니다.\n위의 코드를 참고해 아래 입력창에 직접 작성한 뒤 실행해 보세요.';$('#output').className='';$('#result').textContent='';

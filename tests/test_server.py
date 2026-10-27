@@ -97,6 +97,12 @@ class Docker(unittest.TestCase):
 
 @unittest.skipUnless(os.environ.get('BADAK_DOCKER_TEST') == '1', 'Docker integration opt-in')
 class CppAndTrace(unittest.TestCase):
+    def test_cpp20_ranges(self):
+        code = '#include <ranges>\n#include <vector>\n#include <iostream>\nint main(){std::vector<int> v{1,2,3,4}; for(int n: v | std::views::filter([](int x){return x >= 3;})) std::cout << n << " ";}'
+        result = server.execute(code, runtime='cpp')
+        self.assertEqual(result['returncode'], 0, result)
+        self.assertEqual(result['stdout'].strip(), '3 4')
+
     def test_cpp_compilation_and_trace(self):
         code = '#include <iostream>\n#include <vector>\nint main(){std::vector<int> v={10,20,30,40}; int sum=0; for(int i=0;i<4;++i){sum+=v[i];record_array(v,i,sum);}std::cout<<sum<<"\\n";}'
         result = server.execute(code, runtime='cpp')

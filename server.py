@@ -44,7 +44,7 @@ def execute(code, check='', runtime='torch'):
                CPP_IMAGE if runtime == 'cpp' else IMAGE]
     if runtime == 'cpp':
         # The shell command is a constant. Learner source is only passed on stdin.
-        command += ['sh', '-c', 'cat > /tmp/main.cpp && g++ -std=c++17 -O0 -Wall -Wextra -fmax-errors=5 /tmp/main.cpp -o /tmp/program && /tmp/program']
+        command += ['sh', '-c', 'cat > /tmp/main.cpp && g++ -std=c++20 -O0 -Wall -Wextra -fmax-errors=5 /tmp/main.cpp -o /tmp/program && /tmp/program']
     else:
         command += ['python', '-I', '-u', '-']
     # No shell interpolation, host mounts, host environment, or Docker socket in container.

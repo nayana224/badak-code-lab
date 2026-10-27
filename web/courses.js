@@ -1,11 +1,15 @@
 export const courses = [
  {id:'python',name:'Python',description:'기초·함수·클래스·자료구조·탐색',location:'내 브라우저 · 노트북 CPU',detail:'설치 없이 Python·NumPy를 브라우저에서 실행합니다. 작은 행렬·자료구조 실습에 GPU는 필요하지 않습니다.'},
- {id:'cpp',name:'C++',description:'기초·참조·클래스·정렬·탐색',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'코드를 로컬 Docker의 C++17 컴파일러로 컴파일·실행합니다. 현재는 클라우드 서버가 연결되어 있지 않습니다. GPU는 필요하지 않습니다.'},
+ {id:'cpp',name:'C++',description:'기초·표준 라이브러리·모던 C++',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'코드를 로컬 Docker의 C++20 컴파일러로 컴파일·실행합니다. 현재는 클라우드 서버가 연결되어 있지 않습니다. GPU는 필요하지 않습니다.'},
  {id:'torch',name:'PyTorch',description:'텐서·자동 미분·학습 루프·신경망',location:'이 컴퓨터의 실행 서버 · Docker CPU',detail:'실제 PyTorch CPU에서 실행합니다. GPU를 사용하지 않습니다. 클라우드·GPU 실행은 아직 연결되어 있지 않습니다.'}
 ];
 export const courseId = lesson => ['cpp','torch'].includes(lesson.runtime)?lesson.runtime:'python';
 // Keep the original lesson IDs and sequence so existing drafts and progress remain valid.
 export function lessonTopic(lesson) {
+ if (['cpp-auto','cpp-range-loop','cpp-struct-binding'].includes(lesson.id)) return '모던 C++ · 기초';
+ if (['cpp-string','cpp-algorithm','cpp-lambda','cpp-optional'].includes(lesson.id)) return '표준 라이브러리';
+ if (['cpp-raii','cpp-unique','cpp-move'].includes(lesson.id)) return '객체 수명 · 소유권';
+ if (lesson.id === 'cpp-ranges') return 'C++20';
  if (['stack','py-queue','py-linked-list'].includes(lesson.id)) return '자료구조';
  if (['py-linear-search','py-search','py-selection-sort','cpp-search','cpp-sort'].includes(lesson.id)) return '알고리즘';
  if (['math-matrix-basics','math-dot','math-derivative','math-chain','math-manual-backward','math-tiny-autograd','shape','broadcast','matrix-steps'].includes(lesson.id)) return '수학 · 행렬과 NumPy';
