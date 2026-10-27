@@ -10,7 +10,7 @@ export const courseId = lesson => ['cpp','torch'].includes(lesson.runtime)?lesso
 export function lessonTopic(lesson) {
  if (['cpp-auto','cpp-range-loop','cpp-struct-binding','cpp-template','cpp-constexpr','cpp-concepts'].includes(lesson.id)) return '모던 C++ · 기초';
  if (['cpp-string','cpp-algorithm','cpp-lambda','cpp-optional'].includes(lesson.id)) return '표준 라이브러리';
- if (['cpp-raii','cpp-exception','cpp-unique','cpp-move','cpp-shared','cpp-weak'].includes(lesson.id)) return '객체 수명 · 소유권';
+ if (['cpp-raii','cpp-scope-lifetime','cpp-exception','cpp-vector-copy','cpp-copy-move','cpp-vector-reallocation','cpp-unique','cpp-move','cpp-shared','cpp-weak'].includes(lesson.id)) return '객체 수명 · 소유권';
  if (['cpp-ranges','cpp-span','cpp-string-view'].includes(lesson.id)) return '뷰 · 수명';
  if (['stack','py-queue','py-linked-list'].includes(lesson.id)) return '자료구조';
  if (['py-linear-search','py-search','py-selection-sort','cpp-search','cpp-sort'].includes(lesson.id)) return '알고리즘';

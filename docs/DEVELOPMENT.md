@@ -2,7 +2,7 @@
 
 ## 파일
 
-- `web/lessons.js`, `extra-lessons.js`, `continuation-lessons.js`, `foundation-lessons.js`, `bridge-lessons.js`, `modern-cpp-lessons.js`, `courses.js`, `cpp-reference.js`: 수업·강좌·설명
+- `web/lessons.js`, `extra-lessons.js`, `continuation-lessons.js`, `foundation-lessons.js`, `bridge-lessons.js`, `modern-cpp-lessons.js`, `cpp-lifetime-lessons.js`, `courses.js`, `cpp-reference.js`: 수업·강좌·설명
 - `web/app.js`, `style.css`, `index.html`: UI와 저장·실행 연결
 - `web/editor-adapter.js`, `editor-src/`, `scripts/build-editor.mjs`: 편집기 연결과 재현 가능한 로컬 빌드
 - `web/vendor/editor.js`, `THIRD_PARTY_NOTICES.md`: 포함된 편집기 번들과 의존성 라이선스
