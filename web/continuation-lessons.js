@@ -16,7 +16,7 @@ export const continuationLessons = [
     ],
     "predict": "점수가 [35, 62, 78, 91]이고 기준이 60이면 어떤 값이 남을까요? >= 대신 >를 쓰면 경계 값은 어떻게 될까요?",
     "code": "scores = [35, 62, 78, 91]\nthreshold = 60\npassed = []\nfor score in scores:\n    if score >= threshold:\n        passed.append(score)\nprint(passed)\n",
-    "task": "기준 threshold를 80으로 바꾸고 passed에 [91]만 남겨 보세요. 다음에는 점수 목록에 80도 넣어 경계를 확인하세요.",
+    "task": "기준 threshold를 80으로 바꾸고 passed에 [91]만 남겨 실습을 확인하세요. 통과한 뒤 자유롭게 점수 목록에 80도 넣어 경계를 실험해 보세요.",
     "hint": "threshold = 80",
     "referenceComplete": true,
     "solution": "scores = [35, 62, 78, 91]\nthreshold = 80\npassed = []\nfor score in scores:\n    if score >= threshold:\n        passed.append(score)\nprint(passed)\n",

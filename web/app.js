@@ -1,5 +1,6 @@
 import { lessons } from './lessons.js';
-import { courses, courseId, explanations } from './courses.js';
+import { courses, courseId, explanations, lessonTopic } from './courses.js';
+import { renderLessonMath } from './lesson-math.js';
 import { createTracePlayer } from './trace-player.js';
 import { createLessonEditor } from './editor-adapter.js';
 const $ = s => document.querySelector(s);
@@ -26,7 +27,8 @@ function lines() {fitEditor();codeEditor.sync();$('#line-numbers').textContent=$
 function renderNav() {
   $('#lessons').replaceChildren(); let last='';
   courseLessons().forEach((l, index) => {
-    if(l.group!==last) {const h=document.createElement('div'); h.className='nav-group'; h.textContent=l.group; $('#lessons').append(h);last=l.group;}
+    const topic=lessonTopic(l);
+    if(topic!==last) {const h=document.createElement('div'); h.className='nav-group'; h.textContent=topic; $('#lessons').append(h);last=topic;}
     const b=document.createElement('button'); const done=saved.completed.includes(l.id);
     b.className=`lesson-link ${lesson.id===l.id?'active':''} ${done?'done':''}`;
     b.setAttribute('aria-current', lesson.id===l.id?'step':'false');
@@ -47,6 +49,16 @@ function renderNav() {
     button.append(title,detail);button.onclick=()=>location.hash=items.find(l=>l.id===saved.courseLast[course.id])?.id||items[0].id;
     $('#course-tabs').append(button);
   });
+  const topics=[...new Set(list.map(lessonTopic))];
+  $('#topic-tabs').replaceChildren();
+  topics.forEach(topic=>{
+    const items=list.filter(l=>lessonTopic(l)===topic);
+    const button=document.createElement('button');
+    button.className='topic-tab';button.setAttribute('aria-pressed',String(topic===lessonTopic(lesson)));
+    button.textContent=`${topic} · ${items.filter(l=>saved.completed.includes(l.id)).length}/${items.length}`;
+    button.onclick=()=>location.hash=items[0].id;
+    $('#topic-tabs').append(button);
+  });
 }
 function selectLesson() {
   stop(false);
@@ -61,13 +73,19 @@ function selectLesson() {
   tracer.reset();
   $('#trace-panel').hidden=!(lesson.trace || ['matrix-steps','stack','cpp-vector','cpp-search'].includes(lesson.id));
   $('#show-trace').hidden=$('#trace-panel').hidden;
-  $('#crumb').textContent=lesson.group;
+  $('#crumb').textContent=lessonTopic(lesson);
   $('#eyebrow').textContent=`LESSON ${String(courseLessons().indexOf(lesson)+1).padStart(2,'0')} · ${lesson.runtime==='torch'?'PYTORCH':lesson.runtime.toUpperCase()}`;
   for(const id of ['title','lead','concept','predict','task','takeaway','time']) $('#'+id).textContent=lesson[id];
   $('#visual-label').textContent=lesson.visual[0]; $('#visual-main').textContent=lesson.visual[1]; $('#visual-sub').textContent=lesson.visual[2];
+  renderLessonMath($('#lesson-math'), lesson.id);
   $('#hint-code').textContent=lesson.hint; $('#hint').open=false;
   $('#filename').textContent=lesson.id+'_practice.'+(lesson.runtime==='cpp'?'cpp':'py');
-  const referenceCode=lesson.code.trimEnd()+(lesson.referenceComplete?'':'\n\n# 실습 완성 예시\n'+lesson.hint);
+  const exampleAnswers={
+    'matrix-steps': code=>code.replace('[[1., 2., 3.]','[[2., 2., 3.]'),
+    'cpp-vector': code=>code.replace('{10, 20, 30}','{10, 20, 30, 40}'),
+    'cpp-search': code=>code.replace('binary_search(values, 12)','binary_search(values, 10)')
+  };
+  const referenceCode=lesson.solution || (exampleAnswers[lesson.id] ? exampleAnswers[lesson.id](lesson.code) : lesson.code.trimEnd()+(lesson.referenceComplete?'':'\n\n# 실습 완성 예시\n'+lesson.hint));
   $('#restore-legacy').hidden=typeof saved.codes[lesson.id]!=='string' || !saved.codes[lesson.id].trim();
   $('#runtime-label').textContent=lesson.runtime==='cpp'?'● C++17 · 로컬 Docker CPU':lesson.runtime==='torch'?'● PyTorch · 로컬 Docker CPU':'● 내 브라우저 · '+(lesson.runtime==='numpy'?'Python + NumPy':'Python');
   $('#runtime-status').textContent=['torch','cpp'].includes(lesson.runtime)?'로컬 환경 확인 필요':'브라우저에서 실제 실행';
