@@ -45,7 +45,9 @@ function renderNav() {
     const button=document.createElement('button');
     button.className='course-tab';button.setAttribute('aria-pressed',String(course.id===courseId(lesson)));
     const title=document.createElement('strong');title.textContent=course.name;
-    const detail=document.createElement('small');detail.textContent=`${course.description} · ${items.filter(l=>saved.completed.includes(l.id)).length}/${items.length}`;
+    const completed=items.filter(l=>saved.completed.includes(l.id)).length;
+    const detail=document.createElement('small');detail.textContent=`${completed}/${items.length}`;
+    button.setAttribute('aria-label',`${course.name}, ${items.length}개 수업 중 ${completed}개 완료`);
     button.append(title,detail);button.onclick=()=>location.hash=items.find(l=>l.id===saved.courseLast[course.id])?.id||items[0].id;
     $('#course-tabs').append(button);
   });
