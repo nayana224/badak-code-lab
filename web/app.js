@@ -1,6 +1,8 @@
 import { lessons } from './lessons.js';
 import { courses, courseId, explanations, lessonTopic } from './courses.js';
 import { renderLessonMath } from './lesson-math.js';
+import { recommendedLessons } from './prerequisites.js';
+import { createSetupUI } from './setup-ui.js';
 import { createTracePlayer } from './trace-player.js';
 import { createLessonEditor } from './editor-adapter.js';
 const $ = s => document.querySelector(s);
@@ -67,6 +69,12 @@ function selectLesson() {
   lesson=lessons.find(l=>l.id===location.hash.slice(1)) || lessons[0];
   saved.current=lesson.id; saved.courseLast[courseId(lesson)]=lesson.id; save();
   const course=courses.find(c=>c.id===courseId(lesson));
+  const recommendations=recommendedLessons(lesson,courseLessons(),lessons);
+  const prerequisite=$('#prerequisites');prerequisite.replaceChildren();prerequisite.hidden=!recommendations.length;
+  if(recommendations.length){
+    const label=document.createElement('strong');label.textContent='먼저 보면 좋은 수업';prerequisite.append(label);
+    recommendations.forEach(item=>{const link=document.createElement('a');link.href='#'+item.id;link.textContent=item.title;prerequisite.append(link);});
+  }
   $('#course-name').textContent=course.name+' 튜토리얼';
   $('#progress-caption').textContent=course.name+' 학습 여정';
   $('#runtime-info').textContent=course.location+' — '+course.detail;
@@ -89,6 +97,7 @@ function selectLesson() {
   };
   const referenceCode=lesson.solution || (exampleAnswers[lesson.id] ? exampleAnswers[lesson.id](lesson.code) : lesson.code.trimEnd()+(lesson.referenceComplete?'':'\n\n# 실습 완성 예시\n'+lesson.hint));
   $('#restore-legacy').hidden=typeof saved.codes[lesson.id]!=='string' || !saved.codes[lesson.id].trim();
+  $('#runtime-setup').hidden=!['cpp','torch'].includes(lesson.runtime);
   $('#runtime-label').textContent=lesson.runtime==='cpp'?'● C++20 · 로컬 Docker CPU':lesson.runtime==='torch'?'● PyTorch · 로컬 Docker CPU':'● 내 브라우저 · '+(lesson.runtime==='numpy'?'Python + NumPy':'Python');
   $('#runtime-status').textContent=['torch','cpp'].includes(lesson.runtime)?'로컬 환경 확인 필요':'브라우저에서 실제 실행';
   $('#editor').value=typeof saved.practiceCodes[lesson.id]==='string'?saved.practiceCodes[lesson.id]:'';
@@ -159,11 +168,6 @@ $('#restore-legacy').onclick=()=>{if($('#editor').value && !confirm('현재 입�
 $('#clear').onclick=()=>{$('#output').textContent='';$('#result').textContent='';};
 $('#prev').onclick=()=>location.hash=courseLessons()[courseLessons().indexOf(lesson)-1].id;
 $('#next').onclick=()=>location.hash=courseLessons()[courseLessons().indexOf(lesson)+1].id;
-async function health(){
-  $('#backend-health').textContent='환경 확인 중…';
-  try {const r=await fetch('/api/health',{signal:AbortSignal.timeout(8000)});if(!r.ok)throw Error();const data=await r.json();$('#backend-health').textContent=['torch','cpp'].map(key=>(key==='torch'?'PyTorch':'C++')+': '+(data[key]?.ready?'CPU 실행 준비 완료':data[key]?.message||'상태 확인 불가')).join('\n');}
-  catch{$('#backend-health').textContent='실행 서버에 연결할 수 없습니다. README의 python3 server.py로 시작하세요.';}
-}
 function applyFontSize() {
   const scale=[.9,1,1.1,1.2,1.3].includes(saved.fontScale)?saved.fontScale:1;
   saved.fontScale=scale;
@@ -180,7 +184,9 @@ $('#font-larger').onclick=()=>changeFont(1);
 $('#font-reset').onclick=()=>{saved.fontScale=1;applyFontSize();};
 window.addEventListener('resize', fitEditor);
 applyFontSize();
-$('#settings').onclick=()=>{$('#environment').showModal();health();};$('#health-refresh').onclick=health;
+const setupUI = createSetupUI({document});
+const openSetup=()=>{$('#environment').showModal();setupUI.refresh();};
+$('#settings').onclick=openSetup;$('#runtime-setup').onclick=openSetup;
 window.addEventListener('hashchange',selectLesson);
 if(!location.hash && lessons.some(l=>l.id===saved.current)) location.hash=saved.current;
 selectLesson();

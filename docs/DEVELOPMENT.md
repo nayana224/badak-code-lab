@@ -2,7 +2,7 @@
 
 ## 파일
 
-- `web/lessons.js`, `extra-lessons.js`, `continuation-lessons.js`, `foundation-lessons.js`, `bridge-lessons.js`, `modern-cpp-lessons.js`, `cpp-lifetime-lessons.js`, `python-next-lessons.js`, `torch-next-lessons.js`, `attention-lessons.js`, `project-lessons.js`, `courses.js`, `cpp-reference.js`: 수업·강좌·설명
+- `web/lessons.js`, `extra-lessons.js`, `continuation-lessons.js`, `foundation-lessons.js`, `bridge-lessons.js`, `modern-cpp-lessons.js`, `cpp-lifetime-lessons.js`, `python-next-lessons.js`, `torch-next-lessons.js`, `attention-lessons.js`, `project-lessons.js`, `courses.js`, `cpp-reference.js`, `python-reference.js`: 수업·강좌·설명
 - `web/app.js`, `style.css`, `index.html`: UI와 저장·실행 연결
 - `web/editor-adapter.js`, `editor-src/`, `scripts/build-editor.mjs`: 편집기 연결과 재현 가능한 로컬 빌드
 - `web/vendor/editor.js`, `THIRD_PARTY_NOTICES.md`: 포함된 편집기 번들과 의존성 라이선스
@@ -25,3 +25,5 @@ BADAK_DOCKER_TEST=1 python3 -m unittest discover -s tests -v
 
 참고: [Pyodide worker](https://pyodide.org/en/stable/usage/webworker.html), [PyTorch 설치](https://pytorch.org/get-started/previous-versions/), [Docker 공식 GCC 이미지](https://hub.docker.com/_/gcc).
 
+
+브라우저 실행 환경 준비 및 설명 검사: `node --test tests/setup-ui.test.js tests/cpp-reference.test.js`. Docker 준비 API는 고정된 빌드 작업만 허용합니다.
