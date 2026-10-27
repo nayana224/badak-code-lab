@@ -72,16 +72,20 @@
 | 30 | 뷰 · 수명 | span으로 배열을 복사하지 않고 보기 | C++20 · span · 수명 |
 | 31 | 뷰 · 수명 | string_view와 원본의 수명 | string_view · 비소유 문자열 |
 
-## PyTorch · 6개 수업
+## PyTorch · 10개 수업
 
 | 순서 | 주제 | 수업 | 핵심 내용 |
 |---|---|---|---|
-| 01 | PyTorch · 텐서 | 배열에서 텐서로 | tensor · dtype · matmul |
-| 02 | PyTorch · 미분과 기울기 | 미분을 손으로, 그다음 자동으로 | requires_grad · backward |
-| 03 | PyTorch · 미분과 기울기 | 기울기는 왜 쌓일까? | grad 누적 · zero_ |
-| 04 | PyTorch · 모델 학습 | 학습 루프를 바닥부터 만들기 | forward · backward · update |
-| 05 | PyTorch · 모델 학습 | nn.Linear와 optimizer로 정리하기 | nn.Module · SGD · parameters |
-| 06 | PyTorch · 모델 학습 | 두 층 신경망으로 XOR 배우기 | Sequential · Tanh · Adam |
+| 01 | PyTorch · 텐서와 뉴런 | 배열에서 텐서로 | tensor · dtype · matmul |
+| 02 | PyTorch · 텐서와 뉴런 | 텐서의 행과 열을 꺼내기 | shape · 인덱싱 · 슬라이싱 |
+| 03 | PyTorch · 텐서와 뉴런 | 평균 제곱 오차를 한 칸씩 | 오차 · 제곱 · 평균 |
+| 04 | PyTorch · 텐서와 뉴런 | 텐서로 뉴런 하나 만들기 | 가중치 · 편향 · 예측 |
+| 05 | PyTorch · 미분과 기울기 | 미분을 손으로, 그다음 자동으로 | requires_grad · backward |
+| 06 | PyTorch · 미분과 기울기 | 기울기는 왜 쌓일까? | grad 누적 · zero_ |
+| 07 | PyTorch · 모델 학습과 평가 | 학습 루프를 바닥부터 만들기 | forward · backward · update |
+| 08 | PyTorch · 모델 학습과 평가 | nn.Linear와 optimizer로 정리하기 | nn.Module · SGD · parameters |
+| 09 | PyTorch · 모델 학습과 평가 | 학습과 평가 데이터를 나누기 | train · eval · no_grad |
+| 10 | PyTorch · 모델 학습과 평가 | 두 층 신경망으로 XOR 배우기 | Sequential · Tanh · Adam |
 
 ## 수식과 실행 시각화
 

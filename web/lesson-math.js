@@ -1,5 +1,17 @@
 // Fixed worked examples; the trace panel separately shows the learner's actual execution.
 const examples = {
+ 'torch-loss-mean': {
+  formula:'<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="손실은 예측과 목표의 차이를 제곱한 값의 평균"><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo>(</mo><msub><mover><mi>y</mi><mo>ˆ</mo></mover><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo>)</mo></mrow><mn>2</mn></msup></math>',
+  meaning:'예측과 목표의 차이를 각 원소마다 제곱하고 전체 원소 수 n으로 나눕니다.',
+  worked:'예측 [2, 2], 목표 [2, 1]이면 (0² + 1²) / 2 = 0.5입니다.',
+  code:'error ** 2의 평균을 mean()으로 계산합니다.'
+ },
+ 'torch-manual-neuron': {
+  formula:'<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="예측은 엑스와 더블유의 행렬 곱에 비를 더한 값"><mover><mi>y</mi><mo>ˆ</mo></mover><mo>=</mo><mi>X</mi><mi>w</mi><mo>+</mo><mi>b</mi></math>',
+  meaning:'각 입력 행에 가중치 열을 곱해 더하고 편향 b를 더합니다.',
+  worked:'첫 행 [1, 2], 가중치 [2, −1], b = 1이면 1×2 + 2×(−1) + 1 = 1입니다.',
+  code:'prediction = X @ w + b가 행렬 곱과 편향 덧셈을 계산합니다.'
+ },
  'math-chain': {
   formula: '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="와이를 엑스로 미분하면 와이를 에이로 미분한 값과 에이를 엑스로 미분한 값의 곱"><mfrac><mi>dy</mi><mi>dx</mi></mfrac><mo>=</mo><mfrac><mi>dy</mi><mi>da</mi></mfrac><mo>×</mo><mfrac><mi>da</mi><mi>dx</mi></mfrac></math>',
   meaning: 'a = 2x, y = a²입니다. 두 단계의 기울기를 곱하면 x에 대한 y의 기울기가 됩니다.',
