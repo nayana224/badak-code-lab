@@ -1,5 +1,17 @@
 // Fixed worked examples; the trace panel separately shows the learner's actual execution.
 const examples = {
+ 'math-chain': {
+  formula: '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="와이를 엑스로 미분하면 와이를 에이로 미분한 값과 에이를 엑스로 미분한 값의 곱"><mfrac><mi>dy</mi><mi>dx</mi></mfrac><mo>=</mo><mfrac><mi>dy</mi><mi>da</mi></mfrac><mo>×</mo><mfrac><mi>da</mi><mi>dx</mi></mfrac></math>',
+  meaning: 'a = 2x, y = a²입니다. 두 단계의 기울기를 곱하면 x에 대한 y의 기울기가 됩니다.',
+  worked: 'x = 2이면 a = 4, dy/da = 8, da/dx = 2이므로 dy/dx = 16입니다.',
+  code: 'dy_dx = dy_da * da_dx가 연쇄 법칙을 그대로 계산합니다.'
+ },
+ 'math-manual-backward': {
+  formula: '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="와이는 엑스 더하기 1의 제곱이며 와이를 엑스로 미분한 값은 2 곱하기 엑스 더하기 1"><mi>y</mi><mo>=</mo><msup><mrow><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></mrow><mn>2</mn></msup><mo>,</mo><mfrac><mi>dy</mi><mi>dx</mi></mfrac><mo>=</mo><mn>2</mn><mo>(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo></math>',
+  meaning: '먼저 a = x + 1을 계산하고 y = a²를 만듭니다. 역방향으로 y에서 a, a에서 x로 기울기를 전달합니다.',
+  worked: 'x = 3이면 a = 4, y = 16이고 x에 대한 기울기는 8입니다.',
+  code: 'grad_a와 grad_x가 단계별로 전달된 기울기를 계산합니다.'
+ },
  'math-dot': {
   formula: '<math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="에이와 비의 내적은 같은 인덱스의 곱을 모두 더한 값"><mi>a</mi><mo>·</mo><mi>b</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>a</mi><mi>i</mi></msub><msub><mi>b</mi><mi>i</mi></msub></math>',
   meaning: 'aᵢ와 bᵢ는 두 벡터에서 같은 위치의 값입니다. n은 원소의 개수입니다.',

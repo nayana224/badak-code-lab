@@ -34,6 +34,7 @@ docker build -t badak-torch:2.8.0 .
 
 - [문제 해결: 사이트 연결, Docker, Python 실행](docs/TROUBLESHOOTING.md)
 - [전체 학습 목차](CURRICULUM.md)
+- [학습 확장 계획: Attention과 Transformer](docs/ROADMAP.md)
 - [사용 방법, 편집기, 시각화와 실행 제한](docs/USAGE.md)
 - [개발 및 검사 방법](docs/DEVELOPMENT.md)
 - [확인된 동작과 한계](VERIFICATION.md)

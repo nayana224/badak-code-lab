@@ -14,8 +14,8 @@ class Curriculum(unittest.TestCase):
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(['node', '--input-type=module', '-e', 'import {lessons} from "./web/lessons.js";process.stdout.write(JSON.stringify(lessons));'], cwd=root, check=True, capture_output=True, text=True, timeout=10)
         lessons = json.loads(result.stdout)
-        self.assertEqual(len(lessons), 27)
-        self.assertEqual(len({lesson['id'] for lesson in lessons}), 27)
+        self.assertEqual(len(lessons), 39)
+        self.assertEqual(len({lesson['id'] for lesson in lessons}), 39)
         for lesson in lessons:
             with self.subTest(lesson=lesson['id']):
                 for field in ('title','concept','predict','task','hint','takeaway','code'):

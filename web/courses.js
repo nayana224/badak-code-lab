@@ -6,9 +6,9 @@ export const courses = [
 export const courseId = lesson => ['cpp','torch'].includes(lesson.runtime)?lesson.runtime:'python';
 // Keep the original lesson IDs and sequence so existing drafts and progress remain valid.
 export function lessonTopic(lesson) {
- if (['stack','py-queue'].includes(lesson.id)) return '자료구조';
- if (['py-linear-search','py-search','cpp-search','cpp-sort'].includes(lesson.id)) return '알고리즘';
- if (['math-dot','math-derivative','shape','broadcast','matrix-steps'].includes(lesson.id)) return '수학 · 행렬과 NumPy';
+ if (['stack','py-queue','py-linked-list'].includes(lesson.id)) return '자료구조';
+ if (['py-linear-search','py-search','py-selection-sort','cpp-search','cpp-sort'].includes(lesson.id)) return '알고리즘';
+ if (['math-matrix-basics','math-dot','math-derivative','math-chain','math-manual-backward','math-tiny-autograd','shape','broadcast','matrix-steps'].includes(lesson.id)) return '수학 · 행렬과 NumPy';
  if (lesson.runtime === 'torch') return 'PyTorch · '+(lesson.id === 'tensor' ? '텐서' : ['autograd','torch-gradients'].includes(lesson.id) ? '미분과 기울기' : '모델 학습');
  return lesson.runtime === 'cpp' ? 'C++ 문법' : 'Python 문법';
 }
