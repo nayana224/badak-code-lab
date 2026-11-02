@@ -10,6 +10,8 @@ export const courseId = lesson => ['cpp','torch'].includes(lesson.runtime)?lesso
 // Keep the original lesson IDs and sequence so existing drafts and progress remain valid.
 export function lessonTopic(lesson) {
  if (lesson.id.startsWith('project-')) return '복습 · 프로젝트';
+ if (['torch-module','torch-batches','torch-cross-entropy'].includes(lesson.id)) return 'PyTorch · 모델과 데이터 확장';
+ if (lesson.group === '모던 C++ 심화') return '모던 C++ · 심화';
  if (['cpp-auto','cpp-range-loop','cpp-struct-binding','cpp-template','cpp-constexpr','cpp-concepts'].includes(lesson.id)) return '모던 C++ · 기초';
  if (['cpp-string','cpp-algorithm','cpp-lambda','cpp-optional'].includes(lesson.id)) return '표준 라이브러리';
  if (['cpp-raii','cpp-scope-lifetime','cpp-exception','cpp-vector-copy','cpp-copy-move','cpp-vector-reallocation','cpp-unique','cpp-move','cpp-shared','cpp-weak'].includes(lesson.id)) return '객체 수명 · 소유권';

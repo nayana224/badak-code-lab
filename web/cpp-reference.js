@@ -2,6 +2,8 @@
 const entries = [
  [/#include\s*<iostream>/, '#include <iostream>', 'std::cout 등 표준 입출력 선언을 가져옵니다.'],
  [/#include\s*<vector>/, '#include <vector>', '크기를 바꿀 수 있는 연속 배열 std::vector를 제공합니다.'],
+ [/#include\s*<variant>/, '#include <variant>', '여러 타입 중 하나의 값을 저장하는 std::variant와 방문 도구를 제공합니다.'],
+ [/#include\s*<unordered_map>/, '#include <unordered_map>', '해시 기반 키와 값 컨테이너 std::unordered_map을 제공합니다.'],
  [/#include\s*<string>/, '#include <string>', '문자열을 소유하는 std::string을 제공합니다.'],
  [/#include\s*<string_view>/, '#include <string_view>', '문자열을 소유하지 않는 뷰 std::string_view를 제공합니다.'],
  [/#include\s*<algorithm>/, '#include <algorithm>', '정렬·탐색 등 표준 알고리즘의 선언을 제공합니다.'],

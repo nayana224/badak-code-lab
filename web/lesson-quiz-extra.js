@@ -60,3 +60,15 @@ export const extraQuizzes = {
  'project-torch-train-evaluate':{question:'평가 데이터를 학습에도 쓰면 새로운 데이터에 대한 성능을 공정하게 확인할 수 있을까요?',options:['아니요','예'],answer:0,explanation:'학습에 이미 사용한 데이터는 처음 보는 데이터의 성능을 대표하기 어렵습니다.'},
  'project-torch-causal-attention':{question:'인과 마스크에서 마지막 value만 바꾸면 첫 query 출력은?',options:['바뀌지 않는다','반드시 바뀐다'],answer:0,explanation:'첫 query는 미래 위치를 볼 수 없으므로 마지막 value가 영향을 주지 않습니다.'}
 };
+Object.assign(extraQuizzes, {
+ 'py-aliasing':{question:'b = a 다음 b.append(3)을 실행하면?',options:['a도 변경된다','a는 바뀌지 않는다'],answer:0,explanation:'두 이름이 같은 리스트를 가리킵니다. copy()로 별도의 바깥 리스트를 만들 수 있습니다.'},
+ 'py-comprehension':{question:'[1, 2, 3, 4]에서 짝수의 제곱은?',options:['[4, 16]','[2, 4]','[1, 9]'],answer:0,explanation:'짝수 2와 4를 고른 뒤 제곱하면 4와 16입니다.'},
+ 'py-generator':{question:'제너레이터 함수의 실행은 보통 언제 진행되나요?',options:['next 등으로 다음 값을 요청할 때','제너레이터를 만들 때 모든 yield가 실행된다'],answer:0,explanation:'함수 호출로 제너레이터를 만든 뒤 소비할 때 yield까지 진행합니다.'},
+ 'cpp-variant':{question:'variant<int, string>에 문자열을 저장하면 visit의 람다는 무엇을 받나요?',options:['현재 저장된 문자열','항상 정수 0'],answer:0,explanation:'visit은 현재 활성 대안의 값을 방문 함수에 전달합니다.'},
+ 'cpp-map':{question:'cat이 두 번 나왔을 때 횟수는?',options:['2','1','0'],answer:0,explanation:'같은 키의 값을 두 번 증가시키므로 2입니다.'},
+ 'cpp-range-pipeline':{question:'2와 4를 세 배로 변환하면?',options:['6과 12','4와 8','2와 4'],answer:0,explanation:'2 × 3 = 6, 4 × 3 = 12입니다.'},
+ 'cpp-lambda-capture':{question:'n=2에서 [n]과 [&n]을 만든 다음 n=5로 바꾸면 두 결과는?',options:['2와 5','5와 5','2와 2'],answer:0,explanation:'값 캡처는 2를 복사했고 참조 캡처는 현재 원본 5를 읽습니다.'},
+ 'torch-module':{question:'model(x)의 계산을 정의하는 메서드는?',options:['forward','zero_grad','eval'],answer:0,explanation:'nn.Module을 호출하면 모델의 forward가 계산을 정의합니다.'},
+ 'torch-batches':{question:'샘플 5개를 순서대로 2개씩 배치로 묶으면 크기는?',options:['2, 2, 1','2, 2, 2','3, 2'],answer:0,explanation:'앞에서 두 개씩 가져오면 마지막에는 하나가 남습니다.'},
+ 'torch-cross-entropy':{question:'정답이 클래스 0일 때 손실이 더 작은 logits는?',options:['[2, 0]','[0, 2]'],answer:0,explanation:'클래스 0의 점수가 상대적으로 높으면 정답의 확률이 커져 손실이 작아집니다.'}
+});

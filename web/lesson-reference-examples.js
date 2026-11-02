@@ -118,3 +118,29 @@ export const lessonReferenceExamples = {
  'q @ k.T / math.sqrt(q.shape[-1])':'query와 key의 내적 점수를 특성 수의 제곱근으로 나눕니다.',
  'weights @ v':'각 query의 가중치로 value 행들을 더해 출력을 만듭니다.'
 };
+Object.assign(lessonReferenceExamples, {
+ 'b = a':'a = [1, 2]; b = a라면 b.append(3) 후 a도 [1, 2, 3]입니다.',
+ 'a.copy()':'a = [1, 2]에서 c = a.copy()는 같은 원소를 담은 별도 바깥 리스트를 만듭니다.',
+ '리스트 컴프리헨션':'[x * x for x in [1, 2]]는 새 리스트 [1, 4]를 만듭니다.',
+ 'value % 2 == 0':'value가 4이면 4를 2로 나눈 나머지가 0이므로 True입니다.',
+ 'yield':'yield 1은 값 1을 내보내고 함수의 실행 상태를 보관합니다.',
+ 'next(numbers)':'다음 yield까지 진행해 다음 값을 받습니다. 값이 더 없으면 StopIteration이 발생합니다.',
+ 'std::variant':'std::variant<int, std::string>은 정수 또는 문자열 중 하나를 저장합니다.',
+ 'std::visit':'variant에 들어 있는 현재 값으로 방문 함수를 호출합니다.',
+ 'std::unordered_map':'counts["cat"]에 cat의 횟수를 저장하고 키로 꺼낼 수 있습니다.',
+ 'counts[word]':'없는 키의 int 값을 기본값 0으로 만든 뒤 ++로 1을 더합니다.',
+ 'std::views::transform':'[2, 4]에 각각 3을 곱하는 뷰는 순회할 때 6, 12를 제공합니다.',
+ '뷰의 수명':'원본 vector가 사라지거나 무효화된 뒤 원본을 참조하는 뷰를 순회하면 안 됩니다.',
+ '[n] 값 캡처':'n=2에서 람다를 만든 뒤 n을 5로 바꾸어도 복사한 값은 2입니다.',
+ '[&n] 참조 캡처':'n=2에서 람다를 만든 뒤 n을 5로 바꾸면 살아 있는 원본의 현재 값 5를 읽습니다.',
+ 'nn.Module과 forward':'model(x)를 호출하면 모델에 정의한 forward(x)가 층을 통해 출력을 만듭니다.',
+ 'fill_':'weight.fill_(3.)은 weight의 원소를 3으로 바꿉니다.',
+ 'TensorDataset':'x[0]과 y[0]을 한 샘플로 묶습니다.',
+ 'DataLoader':'샘플 5개를 batch_size=2로 읽으면 기본 설정에서 2개, 2개, 1개 배치를 만듭니다.',
+ 'logits':'[2., 0.]은 두 클래스에 대한 softmax 이전 점수입니다.',
+ 'nn.CrossEntropyLoss':'logits [[2., 0.]]과 정답 인덱스 [0]으로 분류 손실을 계산합니다.'
+});
+Object.assign(lessonReferenceExamples, {
+ '#include <variant>':'이 헤더를 추가하면 std::variant와 std::visit의 선언을 사용할 수 있습니다.',
+ '#include <unordered_map>':'이 헤더를 추가하면 std::unordered_map의 선언을 사용할 수 있습니다.'
+});
