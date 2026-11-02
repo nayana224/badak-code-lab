@@ -5,6 +5,8 @@ import { recommendedLessons } from './prerequisites.js';
 import { createSetupUI } from './setup-ui.js';
 import { createTracePlayer } from './trace-player.js';
 import { createLessonEditor } from './editor-adapter.js';
+import { cppExerciseCheck } from './cpp-exercise-checks.js';
+import { commonError } from './common-errors.js';
 const $ = s => document.querySelector(s);
 const STORE = 'badak-lab-v1';
 let saved;
@@ -80,6 +82,8 @@ function selectLesson() {
   $('#runtime-info').textContent=course.location+' — '+course.detail;
   $('#api-explanations').replaceChildren();
   explanations(lesson).forEach(([name, description])=>{const item=document.createElement('details');const title=document.createElement('summary');title.textContent=name;const text=document.createElement('p');text.textContent=description;item.append(title,text);$('#api-explanations').append(item);});
+  const errorTip=commonError(lesson.id);
+  if(errorTip){const item=document.createElement('details');const title=document.createElement('summary');title.textContent='막혔을 때 확인하기';const text=document.createElement('p');text.textContent=errorTip;item.append(title,text);$('#api-explanations').append(item);}
   tracer.reset();
   $('#trace-panel').hidden=!(lesson.trace || ['matrix-steps','stack','cpp-vector','cpp-search'].includes(lesson.id));
   $('#show-trace').hidden=$('#trace-panel').hidden;
@@ -140,7 +144,18 @@ async function run(check=false) {
       if(result.stderr) consumeOutput(result.stderr,'stderr');
       if(result.error || result.returncode!==0) throw Error(result.error || `${lesson.runtime==='cpp'?'C++':'Python'} 실행이 오류 코드 ${result.returncode}로 종료되었습니다.`);
       if(check&&lesson.runtime==='cpp'&&capturedOutput.trim()!==lesson.expectedOutput) throw Error('실습 결과를 확인하세요. 기대 출력: '+lesson.expectedOutput+' / 실제 출력: '+(capturedOutput.trim()||'(없음)'));
+      const cppCheck = check && lesson.runtime === 'cpp' ? cppExerciseCheck(lesson.id, code) : null;
+      if (cppCheck) {
+        $('#runtime-status').textContent='다른 입력으로 함수 확인 중…';
+        clearTimeout(timer); timer=setTimeout(()=>aborter.abort(),25000);
+        const verifyResponse=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json','X-Lab-Token':config.token},body:JSON.stringify({code:cppCheck,check:'',runtime:'cpp'}),signal:aborter.signal});
+        const verification=await verifyResponse.json(); if(seq!==sequence) return;
+        if(!verifyResponse.ok || verification.error || verification.returncode!==0) {
+          throw Error('추가 입력 검사에 실패했습니다. 참고 코드의 함수 이름과 인자를 유지하고 빈 입력·음수·찾지 못한 값도 확인하세요. '+(verification.error || (verification.stderr || '').slice(0,600)));
+        }
+      }
       finish(check);
+      if (cppCheck) $('#result').textContent='✓ 출력과 여러 입력에 대한 함수 검사를 통과했습니다. 모든 경우의 정확성이 보장되는 것은 아닙니다.';
     } catch(error) {if(seq===sequence) fail(error.name==='AbortError'?'응답 시간이 초과되었습니다. 실행 환경을 확인하세요.':error.message);}
     return;
   }

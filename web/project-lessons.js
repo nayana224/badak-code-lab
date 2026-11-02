@@ -103,7 +103,7 @@ int main() {
 }
 `,expectedOutput:'4 20 8',referenceComplete:true,
   explain:[['std::accumulate(first, last, 0)','<numeric>의 함수로 범위의 원소를 0부터 더합니다.'],['std::max_element(first, last)','<algorithm>의 함수로 최댓값의 위치를 반환합니다. 빈 범위에서는 end를 반환하므로 역참조하지 않습니다.'],['std::optional<Summary>','요약이 없을 수도 있음을 표현합니다. result가 있는지 확인한 뒤 ->로 멤버에 접근합니다.'],['assert','조건이 거짓이면 프로그램을 실패시켜 이 예제의 경계 조건을 확인합니다.']],
-  takeaway:'비어 있는 입력을 먼저 처리하고 표준 알고리즘의 범위와 반환값을 확인합니다. 사이트의 C++ 실습 검사는 출력 비교이므로 별도의 자가 검사를 포함했습니다.'
+  takeaway:'비어 있는 입력을 먼저 처리하고 표준 알고리즘의 범위와 반환값을 확인합니다. 출력과 몇 가지 추가 입력을 검사하지만 모든 경우의 정확성을 보장하지는 않습니다.'
  },
  {
   id:'project-torch-prediction',runtime:'torch',group:'복습 · 프로젝트',title:'프로젝트: 텐서 예측과 손실 계산하기',short:'텐서 예측 · MSE · shape',time:'20분',

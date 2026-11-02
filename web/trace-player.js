@@ -6,9 +6,13 @@ const matrix = x => Array.isArray(x) && x.length>0 && x.length<=8 && x.every(row
 export function validateFrame(frame) {
  if(!frame || !integer(frame.line) || frame.line<1 || frame.line>10000) return false;
  if(frame.kind==='matrix') return matrix(frame.left)&&matrix(frame.right)&&matrix(frame.result)&&frame.left[0].length===frame.right.length&&frame.result.length===frame.left.length&&frame.result[0].length===frame.right[0].length&&['row','col','inner'].every(k=>integer(frame[k])&&frame[k]>=0)&&frame.row<frame.left.length&&frame.col<frame.right[0].length&&frame.inner<frame.right.length&&number(frame.product)&&number(frame.total);
+ if(frame.kind==='causal_attention') return matrix(frame.scores)&&matrix(frame.weights)&&matrix(frame.result)&&Array.isArray(frame.mask)&&frame.mask.length===frame.scores.length&&frame.mask.every(row=>Array.isArray(row)&&row.length===frame.scores[0].length&&row.every(x=>typeof x==='boolean'))&&frame.weights.length===frame.scores.length&&frame.weights[0].length===frame.scores[0].length&&frame.result.length===frame.weights.length;
  if(frame.kind==='attention') return matrix(frame.scores)&&matrix(frame.weights)&&matrix(frame.result)&&frame.scores.length===frame.weights.length&&frame.scores[0].length===frame.weights[0].length&&frame.result.length===frame.weights.length;
  if(frame.kind==='training') return integer(frame.epoch)&&frame.epoch>=0&&frame.epoch<=1e7&&number(frame.loss)&&frame.loss>=0&&values(frame.weights)&&(frame.accuracy===undefined||(number(frame.accuracy)&&frame.accuracy>=0&&frame.accuracy<=1));
  if(frame.kind==='queue') return values(frame.values)&&['enqueue','dequeue'].includes(frame.action)&&number(frame.value);
+ if(frame.kind==='linked') return values(frame.values)&&frame.values.length>0&&number(frame.current)&&(frame.next_value===null||number(frame.next_value))&&frame.values[frame.values.length-1]===frame.current;
+ if(frame.kind==='gradient_paths') return ['x','y','left','right','direct','total'].every(k=>number(frame[k]));
+ if(frame.kind==='selection') return values(frame.values)&&frame.values.length>0&&['candidate','smallest','position'].every(k=>integer(frame[k])&&frame[k]>=0&&frame[k]<frame.values.length)&&['compare','swap'].includes(frame.action);
  if(frame.kind==='sort') return values(frame.values)&&['first','second'].every(k=>integer(frame[k])&&frame[k]>=0&&frame[k]<frame.values.length)&&typeof frame.swapped==='boolean';
  if(frame.kind==='stack') return values(frame.values)&&['push','pop'].includes(frame.action)&&number(frame.value);
  if(frame.kind==='array') return values(frame.values)&&integer(frame.active)&&frame.active>=0&&frame.active<frame.values.length&&number(frame.total);
@@ -46,12 +50,27 @@ export function createTracePlayer(root) {
    scene.append(make('p',`epoch ${f.epoch} · 실제 loss = ${fmt(f.loss)}`+(f.accuracy===undefined?'':` · 정확도 ${fmt(f.accuracy*100)}%`),'trace-description'));
    if(f.weights.length)scene.append(make('p','기록된 파라미터: ['+f.weights.map(fmt).join(', ')+']','trace-description'));
    const data=make('details',undefined,'loss-data');data.append(make('summary','손실 곡선의 실제 수치 보기'));const table=make('table');const header=make('tr');header.append(make('th','epoch'),make('th','loss'));table.append(header);history.forEach(v=>{const row=make('tr');row.append(make('td',String(v.epoch)),make('td',String(v.loss)));table.append(row);});data.append(table);scene.append(data);
+  } else if(f.kind==='causal_attention') {
+   const boxes=make('div',undefined,'matrix-scene');
+   const draw=(label,data,masked=false)=>{const box=make('div',undefined,'matrix-box');box.append(make('strong',label));const grid=make('div',undefined,'matrix-grid');grid.style.gridTemplateColumns=`repeat(${data[0].length}, minmax(32px,1fr))`;data.forEach((row,i)=>row.forEach((v,j)=>grid.append(make('span',masked&&f.mask[i][j]?'가림':fmt(v),masked&&f.mask[i][j]?'matrix-cell excluded':'matrix-cell'))));box.append(grid);return box;};
+   boxes.append(draw('원래 점수 · 미래 위치',f.scores,true),make('b','→'),draw('마스크 후 가중치',f.weights),make('b','→'),draw('출력',f.result));
+   scene.append(boxes,make('p','가린 위치는 softmax 전에 −∞로 바뀌어 가중치가 0이 됩니다. 숫자는 실제 실행값이며 화면에서 반올림됩니다.','trace-description'));
+   const details=make('details',undefined,'loss-data');details.append(make('summary','기록된 실제 수치 보기'),make('pre',JSON.stringify({scores:f.scores,mask:f.mask,weights:f.weights,result:f.result},null,2)));scene.append(details);
   } else if(f.kind==='attention') {
    const boxes=make('div',undefined,'matrix-scene');
    const draw=(label,data)=>{const box=make('div',undefined,'matrix-box');box.append(make('strong',label));const grid=make('div',undefined,'matrix-grid');grid.style.gridTemplateColumns=`repeat(${data[0].length}, minmax(32px,1fr))`;data.forEach(row=>row.forEach(v=>grid.append(make('span',fmt(v),'matrix-cell'))));box.append(grid);return box;};
    boxes.append(draw('점수 QKᵀ / √d',f.scores),make('b','→'),draw('가중치 softmax',f.weights),make('b','→'),draw('출력 weights @ V',f.result));
    scene.append(boxes,make('p','입력한 코드가 기록한 실제 행렬입니다. 행은 query 순서입니다. 숫자는 화면에서 반올림됩니다.','trace-description'));
    const details=make('details',undefined,'loss-data');details.append(make('summary','실제 수치 보기'));const pre=make('pre',JSON.stringify({scores:f.scores,weights:f.weights,result:f.result},null,2));details.append(pre);scene.append(details);
+  } else if(f.kind==='gradient_paths') {
+   const cells=make('div',undefined,'array-scene');
+   [`x = ${fmt(f.x)}`,`곱셈 왼쪽: ${fmt(f.left)}`,`곱셈 오른쪽: ${fmt(f.right)}`,`덧셈: ${fmt(f.direct)}`,`기록한 합: ${fmt(f.total)}`].forEach((label,i)=>{if(i)cells.append(make('span',i===1||i===4?'→':'+'));const cell=make('div',undefined,'array-cell');cell.append(make('strong',label));cells.append(cell);});
+   scene.append(cells,make('p',`y = ${fmt(f.y)} · 입력한 코드에서 기록한 각 경로의 기울기입니다. 기록한 합이 각 경로의 합인지 직접 확인해 보세요.`,'trace-description'));
+  } else if(f.kind==='linked') {
+   const cells=make('div',undefined,'array-scene');
+   f.values.forEach((value,i)=>{if(i)cells.append(make('span','→'));const cell=make('div',undefined,'array-cell');cell.append(make('strong',fmt(value)));if(i===f.values.length-1){cell.classList.add('active');cell.append(make('span','현재','cell-tag'));}cells.append(cell);});
+   cells.append(make('span','→'),make('span',f.next_value===null?'None':fmt(f.next_value),'trace-description'));
+   scene.append(cells,make('p',`실제 순회한 값: [${f.values.map(fmt).join(', ')}] · 현재 노드 ${fmt(f.current)} · 다음 ${f.next_value===null?'None':fmt(f.next_value)}`,'trace-description'));
   } else if(f.kind==='matrix') {
    const boxes=make('div',undefined,'matrix-scene');
    const draw=(label,data,highlight)=>{const box=make('div',undefined,'matrix-box');box.append(make('strong',label));const grid=make('div',undefined,'matrix-grid');grid.style.gridTemplateColumns=`repeat(${data[0].length}, minmax(32px,1fr))`;data.forEach((row,i)=>row.forEach((v,j)=>grid.append(make('span',fmt(v),highlight(i,j)?'matrix-cell active':'matrix-cell'))));box.append(grid);return box;};
@@ -65,12 +84,13 @@ export function createTracePlayer(root) {
     if(f.kind==='array'&&i===f.active)cell.classList.add('active');
     if(f.kind==='stack'&&i===f.values.length-1){cell.classList.add('active');cell.append(make('span','TOP','cell-tag'));}
     if(f.kind==='sort'&&(i===f.first||i===f.second)){cell.classList.add('active');cell.append(make('span','비교','cell-tag'));}
+    if(f.kind==='selection'){if(i<f.position)cell.classList.add('excluded');const tags=[];if(i===f.candidate)tags.push('후보');if(i===f.smallest)tags.push('최솟값');if(i===f.position)tags.push('현재 위치');if(tags.length){cell.classList.add('active');cell.append(make('span',tags.join(' · '),'cell-tag'));}}
     if(f.kind==='queue'&&f.values.length){if(i===0)cell.append(make('span','FRONT','cell-tag'));if(i===f.values.length-1)cell.append(make('span','REAR','queue-rear'));}
     if(f.kind==='search') {if(i<f.left||i>f.right)cell.classList.add('excluded');if(i===f.mid)cell.classList.add('active');const tags=[];if(i===f.left)tags.push('L');if(i===f.mid)tags.push('M');if(i===f.right)tags.push('R');if(tags.length)cell.append(make('span',tags.join(' · '),'cell-tag'));}
     cells.append(cell);
    });scene.append(cells);
-   const desc=f.kind==='training'?'':f.kind==='queue'?`${f.action}(${fmt(f.value)}) 후 큐 · 원소 ${f.values.length}개`:f.kind==='sort'?`인덱스 ${f.first}와 ${f.second} 비교 · ${f.swapped?'교환했습니다':'교환하지 않았습니다'} (비교 후 실제 배열)`:f.kind==='array'?`인덱스 ${f.active}의 값 ${fmt(f.values[f.active])}까지 더한 실제 누적 합: ${fmt(f.total)}`:f.kind==='stack'?`${f.action}(${fmt(f.value)}) 후 스택 · 원소 ${f.values.length}개`:`탐색 범위 [${f.left}, ${f.right}] · mid=${f.mid} · 값=${fmt(f.values[f.mid])} · 목표=${fmt(f.target)}`;
-   scene.append(make('p',desc,'trace-description'));
+   const desc=f.kind==='training'||f.kind==='selection'?'':f.kind==='queue'?`${f.action}(${fmt(f.value)}) 후 큐 · 원소 ${f.values.length}개`:f.kind==='sort'?`인덱스 ${f.first}와 ${f.second} 비교 · ${f.swapped?'교환했습니다':'교환하지 않았습니다'} (비교 후 실제 배열)`:f.kind==='array'?`인덱스 ${f.active}의 값 ${fmt(f.values[f.active])}까지 더한 실제 누적 합: ${fmt(f.total)}`:f.kind==='stack'?`${f.action}(${fmt(f.value)}) 후 스택 · 원소 ${f.values.length}개`:`탐색 범위 [${f.left}, ${f.right}] · mid=${f.mid} · 값=${fmt(f.values[f.mid])} · 목표=${fmt(f.target)}`;
+   scene.append(make('p',f.kind==='selection'?(f.action==='compare'?`인덱스 ${f.candidate}의 값과 현재 최솟값 인덱스 ${f.smallest}를 비교하기 직전입니다.`:`인덱스 ${f.position}과 ${f.smallest}를 교환한 뒤의 배열입니다.`):desc,'trace-description'));
   }
   const source=code.split('\n')[f.line-1];$('[data-source]').textContent=`실행 코드 ${f.line}행: ${source ?? '(행 정보 없음)'}`;
  }

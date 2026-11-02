@@ -1,12 +1,37 @@
+import { cppPrerequisites } from './cpp-prerequisites.js';
 // Suggested cross-course starting points; these do not lock lessons.
 const prerequisites = {
+ ...cppPrerequisites,
  'tensor':['shape','broadcast'],
+ 'math-dot':['py-for','py-list-index'],
+ 'math-derivative':['py-simple-function'],
+ 'math-chain':['math-derivative'],
+ 'math-manual-backward':['math-chain'],
+ 'py-nested-function':['py-functions'],
+ 'py-graph-visit':['py-nested-function','py-classes'],
+ 'math-branch-gradient':['math-manual-backward'],
+ 'math-tiny-autograd':['py-graph-visit','math-branch-gradient'],
+ 'shape':['math-matrix-basics','math-dot'],
+ 'broadcast':['shape'],
+ 'matrix-steps':['shape','math-dot'],
+ 'py-linked-list':['py-classes','py-while'],
+ 'py-search':['py-linear-search'],
+ 'py-selection-sort':['py-for','py-list-index'],
+ 'torch-loss-mean':['tensor','torch-shape-index'],
+ 'torch-manual-neuron':['math-dot','tensor'],
  'autograd':['math-derivative','math-chain'],
+ 'torch-loop':['autograd','torch-gradients'],
+ 'torch-optimizer':['torch-loop'],
+ 'torch-train-evaluate':['torch-optimizer'],
+ 'torch-network':['torch-train-evaluate'],
+ 'torch-similarity':['math-dot','tensor'],
+ 'torch-softmax':['torch-similarity'],
  'torch-attention':['math-dot','torch-softmax'],
  'torch-causal-attention':['torch-attention'],
  'project-python-scores':['py-validation','py-functions'],
- 'project-cpp-summary':['cpp-vector','cpp-algorithm','cpp-optional'],
- 'project-torch-prediction':['torch-manual-neuron','torch-loss-mean']
+ 'project-torch-prediction':['torch-manual-neuron','torch-loss-mean'],
+ 'project-torch-train-evaluate':['torch-train-evaluate','project-torch-prediction'],
+ 'project-torch-causal-attention':['torch-causal-attention','project-torch-train-evaluate']
 };
 export function recommendedLessons(current, inCourse, allLessons) {
  const explicit = prerequisites[current.id];
