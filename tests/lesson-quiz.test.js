@@ -5,6 +5,7 @@ import { quizzes, checkQuiz } from '../web/lesson-quiz.js';
 
 test('quizzes reference existing lessons and have exactly one valid answer', () => {
  const ids=new Set(lessons.map(lesson=>lesson.id));
+ assert.deepEqual([...ids].filter(id=>!quizzes[id]), [], 'every lesson needs a quiz');
  for (const [id,quiz] of Object.entries(quizzes)) {
   assert.ok(ids.has(id), id);
   assert.ok(quiz.question && quiz.explanation, id);

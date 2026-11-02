@@ -1,7 +1,8 @@
 import { lessons } from './lessons.js';
 import { courses, courseId, explanations, lessonTopic } from './courses.js';
 import { renderLessonMath } from './lesson-math.js';
-import { renderQuiz } from './lesson-quiz.js';
+import { quizzes, renderQuiz } from './lesson-quiz.js';
+import { referenceExample } from './reference-examples.js';
 import { recommendedLessons } from './prerequisites.js';
 import { createSetupUI } from './setup-ui.js';
 import { createTracePlayer } from './trace-player.js';
@@ -82,7 +83,7 @@ function selectLesson() {
   $('#progress-caption').textContent=course.name+' 학습 여정';
   $('#runtime-info').textContent=course.location+' — '+course.detail;
   $('#api-explanations').replaceChildren();
-  explanations(lesson).forEach(([name, description])=>{const item=document.createElement('details');const title=document.createElement('summary');title.textContent=name;const text=document.createElement('p');text.textContent=description;item.append(title,text);$('#api-explanations').append(item);});
+  explanations(lesson).forEach(([name, description])=>{const item=document.createElement('details');const title=document.createElement('summary');title.textContent=name;const body=document.createElement('div');body.className='api-explanation-body';const label=document.createElement('strong');label.textContent='어떤 역할인가요?';const text=document.createElement('p');text.textContent=description;body.append(label,text);const example=referenceExample(name);if(example){const exampleLabel=document.createElement('strong');exampleLabel.textContent='예를 들면';const sample=document.createElement('p');sample.className='api-example';sample.textContent=example;body.append(exampleLabel,sample);}item.append(title,body);$('#api-explanations').append(item);});
   const errorTip=commonError(lesson.id);
   if(errorTip){const item=document.createElement('details');const title=document.createElement('summary');title.textContent='막혔을 때 확인하기';const text=document.createElement('p');text.textContent=errorTip;item.append(title,text);$('#api-explanations').append(item);}
   tracer.reset();
@@ -93,6 +94,7 @@ function selectLesson() {
   for(const id of ['title','lead','concept','predict','task','takeaway','time']) $('#'+id).textContent=lesson[id];
   $('#visual-label').textContent=lesson.visual[0]; $('#visual-main').textContent=lesson.visual[1]; $('#visual-sub').textContent=lesson.visual[2];
   renderLessonMath($('#lesson-math'), lesson.id);
+  $('.prompt').hidden = Boolean(quizzes[lesson.id]);
   renderQuiz($('#lesson-quiz'), lesson.id);
   $('#hint-code').textContent=lesson.hint; $('#hint').open=false;
   $('#filename').textContent=lesson.id+'_practice.'+(lesson.runtime==='cpp'?'cpp':'py');

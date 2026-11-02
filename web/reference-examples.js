@@ -1,0 +1,41 @@
+// Examples are explanatory snippets, not automatically executed learner code.
+const examples = [
+ [/^strip\(\)/, '"  민 수  ".strip() → "민 수". 양쪽 공백만 사라지고 가운데 공백은 남습니다.'],
+ [/^str 문자열/, '"3"은 문자이고 3은 숫자입니다. "3" + "4"는 "34"입니다.'],
+ [/^문자열 \+ 문자열/, '"안녕, " + "지수" → "안녕, 지수"'],
+ [/^print\(/, 'print(3 + 2)를 실행하면 화면에 5가 표시됩니다.'],
+ [/^range\(/, 'range(3)은 반복할 때 0, 1, 2를 차례로 제공합니다. 3은 포함하지 않습니다.'],
+ [/^len\(/, 'len([10, 20, 30]) → 3. 리스트의 원소 개수를 셉니다.'],
+ [/^int\(/, 'int("20") → 20. int("hello")는 ValueError를 발생시킵니다.'],
+ [/^append\(/, 'values가 [1, 2]일 때 values.append(3)을 실행하면 values는 [1, 2, 3]이 됩니다.'],
+ [/^shape$/, '2행 3열 배열의 shape는 (2, 3)입니다. 각 숫자가 축의 크기입니다.'],
+ [/^reshape\(/, '원소 6개의 배열은 (2, 3)에서 (3, 2)로 모양을 바꿀 수 있습니다.'],
+ [/^mean\(\)/, '[2, 4]의 평균은 (2 + 4) / 2 = 3입니다. 축을 지정하면 해당 축을 따라 평균을 계산합니다.'],
+ [/^sum\(\)/, '[2, 4]의 합은 6입니다. 축을 지정하면 해당 축을 따라 더합니다.'],
+ [/^item\(\)/, '원소 하나인 tensor(3.)에 item()을 쓰면 Python 숫자 3.0을 얻습니다.'],
+ [/^tolist\(\)/, 'tensor([1, 2]).tolist() → [1, 2]'],
+ [/^backward\(\)/, 'w=3인 텐서에서 y=w*w를 만들고 y.backward()를 호출하면 w.grad에 6이 더해집니다.'],
+ [/^torch\.tensor\(data\)/, 'torch.tensor([1., 2.])는 두 실수 원소를 가진 텐서를 만듭니다.'],
+ [/^np\.array\(data\)/, 'np.array([[1, 2], [3, 4]])는 shape가 (2, 2)인 배열입니다.'],
+ [/^torch\.softmax/, '같은 행의 점수가 [0, 0]이면 softmax 가중치는 [0.5, 0.5]입니다.'],
+ [/^math\.sqrt/, 'math.sqrt(9) → 3.0'],
+ [/^optimizer\.zero_grad/, '매 반복에서 이전 기울기를 지운 후 loss.backward()를 호출합니다.'],
+ [/^optimizer\.step/, '기울기를 구한 다음 step()을 호출해 모델의 파라미터를 갱신합니다.'],
+ [/^record\(/, 'record("stack", values=[10], action="push", value=10)은 이 실습실에 현재 상태를 기록합니다.'],
+ [/^std::cout/, 'std::cout << 3 << "\\n";은 숫자 3을 출력하고 줄을 바꿉니다.'],
+ [/^std::sort/, '값이 [3, 1, 2]인 vector의 전체 범위를 정렬하면 [1, 2, 3]이 됩니다.'],
+ [/^std::find/, '값이 없으면 전달한 마지막 위치(end)를 반환하므로 end와 비교합니다.'],
+ [/^std::count_if/, '[1, 2, 3, 4]에서 짝수 조건을 전달하면 2를 반환합니다.'],
+ [/^std::move/, 'unique_ptr을 다른 unique_ptr로 이동하면 소유권이 옮겨집니다. 타입별 이동 후 상태는 다를 수 있습니다.'],
+ [/^std::make_unique/, 'std::make_unique<int>(3)은 값 3을 가진 정수를 단독 소유하는 포인터를 만듭니다.'],
+ [/^std::optional/, '값이 없을 수 있는 결과를 optional로 나타내고, 사용하기 전 값이 있는지 확인합니다.'],
+ [/^at\(index\)/, 'word가 "code"라면 word.at(1)은 o입니다. 범위를 벗어나면 예외가 발생합니다.'],
+ [/^size\(\)/, 'vector<int>{1, 2, 3}.size()는 3입니다. std::string의 size는 문자 수가 아닌 코드 단위 수입니다.'],
+ [/^begin\(\)과 end\(\)/, '[begin, end)는 첫 원소부터 마지막 원소까지를 뜻하며 end 자체는 원소가 아닙니다.'],
+ [/^std::views::filter/, '짝수 조건을 주면 원본에서 2, 4처럼 조건을 만족하는 값만 순회합니다.'],
+ [/^std::span<T>/, '원본 vector의 일부를 복사하지 않고 볼 수 있습니다. 원본이 사라지면 뷰도 사용할 수 없습니다.'],
+ [/^torch\.no_grad/, '평가할 때 with torch.no_grad(): 안에서 예측하면 해당 연산의 기울기 기록을 만들지 않습니다.']
+];
+export function referenceExample(name) {
+ return examples.find(([pattern])=>pattern.test(name))?.[1] || null;
+}

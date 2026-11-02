@@ -52,3 +52,6 @@ main{align-self:start;margin:0 auto;padding-top:32px;padding-bottom:48px;min-wid
 @media(min-width:1550px){main{padding-top:38px}}
 @media(max-width:1200px){main{padding-top:26px}.workspace{gap:18px}}
 @media(max-width:620px){aside{position:static;height:auto;overflow:visible;padding:16px;border-bottom-color:#dce8df}.app-shell{display:block}main{padding:22px 16px 40px}.lesson-panel{padding:20px}.course-picker{gap:9px;margin-bottom:20px}.topic-tabs{gap:6px}.topic-tab{font-size:.75rem;padding:8px 11px}.workspace{gap:16px}.lesson-heading{margin-bottom:18px}.runtime-info{margin-bottom:18px}.lesson-link{min-width:164px}}
+.api-guide summary{color:#274b38;font-weight:600;align-items:center;gap:10px}.api-guide summary::after{content:'+';font:600 1rem 'Noto Sans KR',sans-serif;color:#56816a}.api-guide details[open] summary::after{content:'−'}.api-guide details[open]{border-color:#bfd9c8;background:#fbfefc}.api-explanation-body{padding:0 14px 15px}.api-explanation-body strong{display:block;color:#49715a;font-size:.72rem;margin:5px 0}.api-guide .api-explanation-body p{padding:0;font-size:.82rem;line-height:1.8;color:#354f40}.api-guide .api-explanation-body .api-example{background:#edf6ef;border-radius:6px;padding:9px 11px;margin-top:5px;overflow-wrap:anywhere}
+
+.prompt[hidden]{display:none}

@@ -1,3 +1,4 @@
+import { extraQuizzes } from './lesson-quiz-extra.js';
 // Short independent questions: IDs link them to existing lessons without changing progress.
 export const quizzes = {
  'py-first': {question:'price = 3, count = 2일 때 price * count는?', options:['5','6','32'], answer:1, explanation:'*는 곱셈이므로 3 × 2 = 6입니다.'},
@@ -24,6 +25,7 @@ export const quizzes = {
  'torch-softmax': {question:'같은 축에 있는 점수 세 개가 모두 같으면 각 softmax 값은?', options:['0','1/3','1'], answer:1, explanation:'같은 점수는 같은 가중치를 받고, 세 가중치의 합은 1이므로 각각 1/3입니다.'},
  'torch-causal-attention': {question:'인과 마스크에서 첫 토큰의 query는 미래 토큰의 key를 볼 수 있을까요?', options:['볼 수 있다','볼 수 없다'], answer:1, explanation:'미래 위치는 softmax 전에 가려져 해당 가중치가 0이 됩니다.'}
 };
+Object.assign(quizzes, extraQuizzes);
 export function checkQuiz(quiz, selected) {
  if (!Number.isInteger(selected) || selected < 0 || selected >= quiz.options.length) return null;
  return selected === quiz.answer;
@@ -34,7 +36,7 @@ export function renderQuiz(root, id) {
  if (!quiz) return;
  const form=document.createElement('form'); form.className='quiz-form';
  const fieldset=document.createElement('fieldset'); fieldset.setAttribute('aria-describedby','quiz-question');
- const legend=document.createElement('legend'); legend.textContent='짧은 확인 문제'; fieldset.append(legend);
+ const legend=document.createElement('legend'); legend.textContent='실행 전에 예측하기'; fieldset.append(legend);
  const question=document.createElement('p'); question.id='quiz-question'; question.textContent=quiz.question; fieldset.append(question);
  quiz.options.forEach((option,index)=>{
   const label=document.createElement('label'); label.className='quiz-option';
