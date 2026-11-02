@@ -2,6 +2,7 @@ const PREFIX = '__BADAK_TRACE__';
 const number = x => typeof x==='number' && Number.isFinite(x) && Math.abs(x)<=1e12;
 const integer = x => Number.isInteger(x);
 const values = x => Array.isArray(x) && x.length<=32 && x.every(number);
+const nestedLists = x => Array.isArray(x) && x.length<=8 && x.every(row=>values(row)&&row.length<=8);
 const matrix = x => Array.isArray(x) && x.length>0 && x.length<=8 && x.every(row=>values(row)&&row.length>0&&row.length<=8&&row.length===x[0].length);
 export function validateFrame(frame) {
  if(!frame || !integer(frame.line) || frame.line<1 || frame.line>10000) return false;
@@ -11,6 +12,7 @@ export function validateFrame(frame) {
  if(frame.kind==='attention') return matrix(frame.scores)&&matrix(frame.weights)&&matrix(frame.result)&&frame.scores.length===frame.weights.length&&frame.scores[0].length===frame.weights[0].length&&frame.result.length===frame.weights.length;
  if(frame.kind==='training') return integer(frame.epoch)&&frame.epoch>=0&&frame.epoch<=1e7&&number(frame.loss)&&frame.loss>=0&&values(frame.weights)&&(frame.accuracy===undefined||(number(frame.accuracy)&&frame.accuracy>=0&&frame.accuracy<=1));
  if(frame.kind==='batch') return integer(frame.epoch)&&frame.epoch>=0&&frame.epoch<=1e7&&integer(frame.batch)&&frame.batch>=0&&frame.batch<=1e7&&values(frame.inputs)&&values(frame.targets)&&frame.inputs.length>0&&frame.inputs.length===frame.targets.length;
+ if(frame.kind==='shallow_copy') return nestedLists(frame.original)&&nestedLists(frame.copied)&&typeof frame.same_outer==='boolean'&&Array.isArray(frame.same_inner)&&frame.same_inner.length===Math.min(frame.original.length,frame.copied.length)&&frame.same_inner.every(x=>typeof x==='boolean');
  if(frame.kind==='queue') return values(frame.values)&&['enqueue','dequeue'].includes(frame.action)&&number(frame.value);
  if(frame.kind==='linked') return values(frame.values)&&frame.values.length>0&&number(frame.current)&&(frame.next_value===null||number(frame.next_value))&&frame.values[frame.values.length-1]===frame.current;
  if(frame.kind==='gradient_paths') return ['x','y','left','right','direct','total'].every(k=>number(frame[k]));
@@ -52,6 +54,19 @@ export function createTracePlayer(root) {
    scene.append(make('p',`epoch ${f.epoch} · 실제 loss = ${fmt(f.loss)}`+(f.accuracy===undefined?'':` · 정확도 ${fmt(f.accuracy*100)}%`),'trace-description'));
    if(f.weights.length)scene.append(make('p','기록된 파라미터: ['+f.weights.map(fmt).join(', ')+']','trace-description'));
    const data=make('details',undefined,'loss-data');data.append(make('summary','손실 곡선의 실제 수치 보기'));const table=make('table');const header=make('tr');header.append(make('th','epoch'),make('th','loss'));table.append(header);history.forEach(v=>{const row=make('tr');row.append(make('td',String(v.epoch)),make('td',String(v.loss)));table.append(row);});data.append(table);scene.append(data);
+  } else if(f.kind==='shallow_copy') {
+   const table=make('table',undefined,'batch-table shallow-copy-table');
+   const caption=make('caption','각 위치의 안쪽 리스트와 Python is 비교 결과');table.append(caption);
+   const header=make('tr');header.append(make('th','위치'),make('th','original'),make('th','객체 관계'),make('th','copied'));table.append(header);
+   const list=row=>'['+row.map(fmt).join(', ')+']';
+   const max=Math.max(f.original.length,f.copied.length);
+   for(let i=0;i<max;i++){
+    const row=make('tr');
+    const both=i<f.original.length&&i<f.copied.length;
+    const relation=make('td',both?(f.same_inner[i]?'← 같은 객체 →':'서로 다른 객체'):'비교할 쌍 없음',both?(f.same_inner[i]?'copy-shared':'copy-separate'):'copy-missing');
+    row.append(make('td',String(i)),make('td',i<f.original.length?list(f.original[i]):'없음'),relation,make('td',i<f.copied.length?list(f.copied[i]):'없음'));table.append(row);
+   }
+   scene.append(make('p',`바깥 리스트: ${f.same_outer?'같은 객체':'서로 다른 객체'}`,'trace-description'),table,make('p','같은 값인지만 비교한 결과가 아닙니다. 실행 코드가 Python is로 확인해 기록한 관계와 그 시점의 실제 값입니다.','trace-description'));
   } else if(f.kind==='batch') {
    const table=make('table',undefined,'batch-table');
    const head=make('tr');head.append(make('th','배치 안 위치'),make('th','입력'),make('th','목표'));table.append(head);

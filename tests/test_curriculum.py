@@ -33,8 +33,9 @@ print('attention verified')
         root = Path(__file__).resolve().parents[1]
         result = subprocess.run(['node', '--input-type=module', '-e', 'import {lessons} from "./web/lessons.js";process.stdout.write(JSON.stringify(lessons));'], cwd=root, check=True, capture_output=True, text=True, timeout=10)
         lessons = json.loads(result.stdout)
-        self.assertEqual(len(lessons), 105)
-        self.assertEqual(len({lesson['id'] for lesson in lessons}), 105)
+        self.assertEqual(len(lessons), 113)
+        self.assertEqual(len({lesson['id'] for lesson in lessons}), 113)
+        recorded_frames = []
         for lesson in lessons:
             with self.subTest(lesson=lesson['id']):
                 for field in ('title','concept','predict','task','hint','takeaway','code'):
@@ -54,6 +55,7 @@ print('attention verified')
                 self.assertEqual(answer['returncode'], 0, answer)
                 self.assertIsNone(answer['error'])
                 frames = [json.loads(line.removeprefix('__BADAK_TRACE__')) for line in answer['stdout'].splitlines() if line.startswith('__BADAK_TRACE__')]
+                recorded_frames.extend({'lesson': lesson['id'], 'frame': frame} for frame in frames)
                 output = '\n'.join(line for line in answer['stdout'].splitlines() if not line.startswith('__BADAK_TRACE__')).strip()
                 if lesson.get('expectedOutput'):
                     self.assertEqual(output, lesson['expectedOutput'])
@@ -62,3 +64,10 @@ print('attention verified')
                 if frames and frames[-1]['kind']=='training':
                     self.assertLess(frames[-1]['loss'], frames[0]['loss'])
                     self.assertTrue(all(frame['loss']>=0 for frame in frames))
+        validation = subprocess.run(['node', '--input-type=module', '-e', '''
+import {validateFrame} from './web/trace-player.js';
+let data = ''; for await (const chunk of process.stdin) data += chunk;
+const invalid = JSON.parse(data).filter(x => !validateFrame(x.frame)).map(x => x.lesson);
+if (invalid.length) { console.error('Invalid recorded frames:', [...new Set(invalid)].join(', ')); process.exit(1); }
+'''], cwd=root, input=json.dumps(recorded_frames), text=True, capture_output=True, timeout=10)
+        self.assertEqual(validation.returncode, 0, validation.stderr)

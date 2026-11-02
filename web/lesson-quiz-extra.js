@@ -1,3 +1,5 @@
+import { pythonLibraryQuizzes } from './python-library-lessons.js';
+import { shallowCopyQuizzes } from './shallow-copy-lesson.js';
 import { torchExpansionQuizzes } from './torch-expansion.js';
 import { pythonExpansionQuizzes } from './python-expansion.js';
 import { cppExpansionQuizzes } from './cpp-expansion-support.js';
@@ -79,3 +81,7 @@ Object.assign(extraQuizzes, {
 Object.assign(extraQuizzes, pythonExpansionQuizzes, cppExpansionQuizzes);
 
 Object.assign(extraQuizzes, torchExpansionQuizzes);
+
+Object.assign(extraQuizzes, shallowCopyQuizzes);
+
+Object.assign(extraQuizzes, pythonLibraryQuizzes);
