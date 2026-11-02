@@ -151,3 +151,7 @@ Object.assign(lessonReferenceExamples, {
 Object.assign(lessonReferenceExamples, pythonExpansionExamples, cppExpansionExamples);
 
 Object.assign(lessonReferenceExamples, torchExpansionExamples);
+
+Object.assign(lessonReferenceExamples, {
+ 'record("broadcast", ...)':'X와 bias, X + bias 결과를 기록해 각 행에서 같은 bias 원소를 쓰는 모습을 봅니다.'
+});
