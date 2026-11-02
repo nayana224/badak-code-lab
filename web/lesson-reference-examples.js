@@ -1,3 +1,6 @@
+import { torchExpansionExamples } from './torch-expansion.js';
+import { pythonExpansionExamples } from './python-expansion.js';
+import { cppExpansionExamples } from './cpp-expansion-support.js';
 // Examples for lesson-specific terms. These illustrate the concept independently.
 export const lessonReferenceExamples = {
  'for score in scores':'scores가 [35, 62]이면 score에 35와 62를 차례로 넣어 반복합니다.',
@@ -144,3 +147,7 @@ Object.assign(lessonReferenceExamples, {
  '#include <variant>':'이 헤더를 추가하면 std::variant와 std::visit의 선언을 사용할 수 있습니다.',
  '#include <unordered_map>':'이 헤더를 추가하면 std::unordered_map의 선언을 사용할 수 있습니다.'
 });
+
+Object.assign(lessonReferenceExamples, pythonExpansionExamples, cppExpansionExamples);
+
+Object.assign(lessonReferenceExamples, torchExpansionExamples);

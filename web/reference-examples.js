@@ -109,5 +109,5 @@ const examples = [
  [/^torch\.no_grad/, '평가할 때 with torch.no_grad(): 안에서 예측하면 해당 연산의 기울기 기록을 만들지 않습니다.']
 ];
 export function referenceExample(name) {
- return examples.find(([pattern])=>pattern.test(name))?.[1] || lessonReferenceExamples[name] || null;
+ return lessonReferenceExamples[name] || examples.find(([pattern])=>pattern.test(name))?.[1] || null;
 }

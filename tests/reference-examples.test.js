@@ -14,3 +14,7 @@ test('every rendered explanation has a nonempty explanatory example', () => {
   }
  }
 });
+test('lesson-specific examples take precedence over generic function examples',()=>{
+ assert.match(referenceExample('record("batch", ...)'),/batch/);
+ assert.match(referenceExample('torch.tensor(...)'),/tensor/);
+});

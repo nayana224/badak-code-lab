@@ -1,7 +1,9 @@
+import { cppExpansionChecks } from './cpp-expansion-support.js';
 // The original program is run separately; these checks call reusable functions
 // with several small inputs in the same Docker sandbox. They are examples,
 // not a proof of correctness or a security boundary.
 const checks = {
+ ...cppExpansionChecks,
  'cpp-function': `if (double_value(0) != 0 || double_value(-3) != -6 || double_value(5) != 10) return 1;`,
  'cpp-vector': `if (sum({}) != 0 || sum({-2, 5, -1}) != 2 || sum({7}) != 7) return 1;`,
  'cpp-search': `if (binary_search({}, 4) != -1 || binary_search({1, 3, 5, 7}, 1) != 0 || binary_search({1, 3, 5, 7}, 7) != 3 || binary_search({1, 3, 5, 7}, 4) != -1) return 1;`,

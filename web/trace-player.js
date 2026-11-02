@@ -9,6 +9,7 @@ export function validateFrame(frame) {
  if(frame.kind==='causal_attention') return matrix(frame.scores)&&matrix(frame.weights)&&matrix(frame.result)&&Array.isArray(frame.mask)&&frame.mask.length===frame.scores.length&&frame.mask.every(row=>Array.isArray(row)&&row.length===frame.scores[0].length&&row.every(x=>typeof x==='boolean'))&&frame.weights.length===frame.scores.length&&frame.weights[0].length===frame.scores[0].length&&frame.result.length===frame.weights.length;
  if(frame.kind==='attention') return matrix(frame.scores)&&matrix(frame.weights)&&matrix(frame.result)&&frame.scores.length===frame.weights.length&&frame.scores[0].length===frame.weights[0].length&&frame.result.length===frame.weights.length;
  if(frame.kind==='training') return integer(frame.epoch)&&frame.epoch>=0&&frame.epoch<=1e7&&number(frame.loss)&&frame.loss>=0&&values(frame.weights)&&(frame.accuracy===undefined||(number(frame.accuracy)&&frame.accuracy>=0&&frame.accuracy<=1));
+ if(frame.kind==='batch') return integer(frame.epoch)&&frame.epoch>=0&&frame.epoch<=1e7&&integer(frame.batch)&&frame.batch>=0&&frame.batch<=1e7&&values(frame.inputs)&&values(frame.targets)&&frame.inputs.length>0&&frame.inputs.length===frame.targets.length;
  if(frame.kind==='queue') return values(frame.values)&&['enqueue','dequeue'].includes(frame.action)&&number(frame.value);
  if(frame.kind==='linked') return values(frame.values)&&frame.values.length>0&&number(frame.current)&&(frame.next_value===null||number(frame.next_value))&&frame.values[frame.values.length-1]===frame.current;
  if(frame.kind==='gradient_paths') return ['x','y','left','right','direct','total'].every(k=>number(frame[k]));
@@ -50,6 +51,11 @@ export function createTracePlayer(root) {
    scene.append(make('p',`epoch ${f.epoch} · 실제 loss = ${fmt(f.loss)}`+(f.accuracy===undefined?'':` · 정확도 ${fmt(f.accuracy*100)}%`),'trace-description'));
    if(f.weights.length)scene.append(make('p','기록된 파라미터: ['+f.weights.map(fmt).join(', ')+']','trace-description'));
    const data=make('details',undefined,'loss-data');data.append(make('summary','손실 곡선의 실제 수치 보기'));const table=make('table');const header=make('tr');header.append(make('th','epoch'),make('th','loss'));table.append(header);history.forEach(v=>{const row=make('tr');row.append(make('td',String(v.epoch)),make('td',String(v.loss)));table.append(row);});data.append(table);scene.append(data);
+  } else if(f.kind==='batch') {
+   const table=make('table',undefined,'batch-table');
+   const head=make('tr');head.append(make('th','배치 안 위치'),make('th','입력'),make('th','목표'));table.append(head);
+   f.inputs.forEach((value,i)=>{const row=make('tr');row.append(make('td',String(i)),make('td',fmt(value)),make('td',fmt(f.targets[i])));table.append(row);});
+   scene.append(make('p',`학습 ${f.epoch}회차 · 배치 ${f.batch} · ${f.inputs.length}개 샘플`,'trace-description'),table,make('p','입력과 목표는 같은 행이 한 쌍입니다. 입력한 코드가 기록한 실제 배치입니다.','trace-description'));
   } else if(f.kind==='causal_attention') {
    const boxes=make('div',undefined,'matrix-scene');
    const draw=(label,data,masked=false)=>{const box=make('div',undefined,'matrix-box');box.append(make('strong',label));const grid=make('div',undefined,'matrix-grid');grid.style.gridTemplateColumns=`repeat(${data[0].length}, minmax(32px,1fr))`;data.forEach((row,i)=>row.forEach((v,j)=>grid.append(make('span',masked&&f.mask[i][j]?'가림':fmt(v),masked&&f.mask[i][j]?'matrix-cell excluded':'matrix-cell'))));box.append(grid);return box;};

@@ -10,7 +10,7 @@ export const courseId = lesson => ['cpp','torch'].includes(lesson.runtime)?lesso
 // Keep the original lesson IDs and sequence so existing drafts and progress remain valid.
 export function lessonTopic(lesson) {
  if (lesson.id.startsWith('project-')) return '복습 · 프로젝트';
- if (['torch-module','torch-batches','torch-cross-entropy'].includes(lesson.id)) return 'PyTorch · 모델과 데이터 확장';
+ if (['torch-module','torch-batches','torch-batch-training','torch-state-dict','torch-cross-entropy'].includes(lesson.id)) return 'PyTorch · 모델과 데이터 확장';
  if (lesson.group === '모던 C++ 심화') return '모던 C++ · 심화';
  if (['cpp-auto','cpp-range-loop','cpp-struct-binding','cpp-template','cpp-constexpr','cpp-concepts'].includes(lesson.id)) return '모던 C++ · 기초';
  if (['cpp-string','cpp-algorithm','cpp-lambda','cpp-optional'].includes(lesson.id)) return '표준 라이브러리';
@@ -19,7 +19,7 @@ export function lessonTopic(lesson) {
  if (['stack','py-queue','py-linked-list'].includes(lesson.id)) return '자료구조';
  if (['py-linear-search','py-search','py-selection-sort','cpp-search','cpp-sort'].includes(lesson.id)) return '알고리즘';
  if (['math-matrix-basics','math-dot','math-derivative','math-chain','math-manual-backward','math-branch-gradient','math-tiny-autograd','shape','broadcast','matrix-steps'].includes(lesson.id)) return '수학 · 행렬과 NumPy';
- if (lesson.runtime === 'torch') return 'PyTorch · '+(['torch-similarity','torch-softmax','torch-attention','torch-causal-attention'].includes(lesson.id) ? 'Attention 기초' : ['tensor','torch-shape-index','torch-loss-mean','torch-manual-neuron'].includes(lesson.id) ? '텐서와 뉴런' : ['autograd','torch-gradients'].includes(lesson.id) ? '미분과 기울기' : '모델 학습과 평가');
+ if (lesson.runtime === 'torch') return 'PyTorch · '+(['torch-similarity','torch-softmax','torch-attention','torch-causal-attention','torch-split-heads','torch-multi-head'].includes(lesson.id) ? 'Attention 기초' : ['tensor','torch-shape-index','torch-loss-mean','torch-manual-neuron'].includes(lesson.id) ? '텐서와 뉴런' : ['autograd','torch-gradients'].includes(lesson.id) ? '미분과 기울기' : '모델 학습과 평가');
  return lesson.runtime === 'cpp' ? 'C++ 문법' : 'Python 문법';
 }
 export function explanations(lesson) {

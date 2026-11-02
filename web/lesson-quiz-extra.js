@@ -1,3 +1,6 @@
+import { torchExpansionQuizzes } from './torch-expansion.js';
+import { pythonExpansionQuizzes } from './python-expansion.js';
+import { cppExpansionQuizzes } from './cpp-expansion-support.js';
 // Questions cover the prediction in each remaining lesson.
 export const extraQuizzes = {
  'py-strings':{question:'"  민 수  ".strip()과 "3" + "4"의 결과는?',options:['"민 수"와 "34"','"민수"와 7','"민 수"와 7'],answer:0,explanation:'strip()은 양 끝 공백만 지우고, 문자열 +는 문자를 이어 붙입니다.'},
@@ -72,3 +75,7 @@ Object.assign(extraQuizzes, {
  'torch-batches':{question:'샘플 5개를 순서대로 2개씩 배치로 묶으면 크기는?',options:['2, 2, 1','2, 2, 2','3, 2'],answer:0,explanation:'앞에서 두 개씩 가져오면 마지막에는 하나가 남습니다.'},
  'torch-cross-entropy':{question:'정답이 클래스 0일 때 손실이 더 작은 logits는?',options:['[2, 0]','[0, 2]'],answer:0,explanation:'클래스 0의 점수가 상대적으로 높으면 정답의 확률이 커져 손실이 작아집니다.'}
 });
+
+Object.assign(extraQuizzes, pythonExpansionQuizzes, cppExpansionQuizzes);
+
+Object.assign(extraQuizzes, torchExpansionQuizzes);
