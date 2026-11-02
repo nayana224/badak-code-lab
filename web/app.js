@@ -1,6 +1,7 @@
 import { lessons } from './lessons.js';
 import { courses, courseId, explanations, lessonTopic } from './courses.js';
 import { renderLessonMath } from './lesson-math.js';
+import { renderQuiz } from './lesson-quiz.js';
 import { recommendedLessons } from './prerequisites.js';
 import { createSetupUI } from './setup-ui.js';
 import { createTracePlayer } from './trace-player.js';
@@ -92,6 +93,7 @@ function selectLesson() {
   for(const id of ['title','lead','concept','predict','task','takeaway','time']) $('#'+id).textContent=lesson[id];
   $('#visual-label').textContent=lesson.visual[0]; $('#visual-main').textContent=lesson.visual[1]; $('#visual-sub').textContent=lesson.visual[2];
   renderLessonMath($('#lesson-math'), lesson.id);
+  renderQuiz($('#lesson-quiz'), lesson.id);
   $('#hint-code').textContent=lesson.hint; $('#hint').open=false;
   $('#filename').textContent=lesson.id+'_practice.'+(lesson.runtime==='cpp'?'cpp':'py');
   const exampleAnswers={
