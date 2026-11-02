@@ -246,7 +246,7 @@ int main() {
 
 modernCppLessons.push(
  lesson({id:'cpp-template',title:'템플릿으로 타입에 공통인 함수 만들기',short:'template · 타입 매개변수',
-  lead:'같은 계산을 여러 숫자 타입에 적용하는 함수를 만듭니다.',concept:'함수 템플릿은 타입을 매개변수로 받는 설계입니다. 호출할 때 전달된 인자에 맞춰 함수가 만들어집니다. 이 예제는 두 인자의 타입이 같아야 합니다.',
+  lead:'같은 계산을 여러 숫자 타입에 적용하는 함수를 만듭니다.',concept:'함수 템플릿은 타입을 매개변수로 받는 설계입니다. 호출할 때 전달된 인자에 맞춰 함수가 만들어집니다. 이 예제는 같은 값에 + 연산을 적용할 수 있는 타입을 사용합니다.',
   visual:['twice<int>(3) → 6','twice<double>(1.5) → 3','입력 타입에 맞춰 계산합니다'],predict:'twice(4)는 무엇을 반환할까요?',
   code:`#include <iostream>\ntemplate <typename T>\nT twice(T value) { return value + value; }\nint main() {\n    std::cout << twice(3) << " " << twice(1.5) << "\\n";\n}\n`,
   task:'정수 인자를 4로 바꿔 8 3을 출력하세요.',hint:'twice(4)',
