@@ -7,6 +7,8 @@ const entries = [
  [/#include\s*<string>/, '#include <string>', '문자열을 소유하는 std::string을 제공합니다.'],
  [/#include\s*<string_view>/, '#include <string_view>', '문자열을 소유하지 않는 뷰 std::string_view를 제공합니다.'],
  [/#include\s*<algorithm>/, '#include <algorithm>', '정렬·탐색 등 표준 알고리즘의 선언을 제공합니다.'],
+ [/#include\s*<numeric>/, '#include <numeric>', 'std::accumulate 등 수치 연산 도구의 선언을 제공합니다.'],
+ [/#include\s*<cassert>/, '#include <cassert>', '실행 중 조건을 검사하는 assert 매크로를 제공합니다. 빌드 설정에 따라 비활성화될 수 있습니다.'],
  [/#include\s*<memory>/, '#include <memory>', 'unique_ptr, shared_ptr 등 메모리 관리 도구를 제공합니다.'],
  [/#include\s*<optional>/, '#include <optional>', '값이 있거나 없을 수 있음을 표현하는 std::optional을 제공합니다.'],
  [/#include\s*<utility>/, '#include <utility>', 'std::move와 std::swap 같은 유틸리티를 제공합니다.'],
@@ -40,5 +42,8 @@ const entries = [
 
 export function cppReferences(lesson) {
  const code = lesson.solution || lesson.code || '';
- return entries.filter(([pattern]) => pattern.test(code)).map(([,name,description]) => [name,description]);
+ const usesMapAt = /std::unordered_map\s*</.test(code) && /\bcounts\.at\s*\(/.test(code);
+ const matched = entries.filter(([pattern, name]) => pattern.test(code) && !(usesMapAt && name === 'at(index)')).map(([,name,description]) => [name,description]);
+ if (usesMapAt) matched.push(['unordered_map::at(key)', '키에 대응하는 값을 읽습니다. 키가 없으면 std::out_of_range 예외를 던지며 새 키를 삽입하지 않습니다.']);
+ return matched;
 }

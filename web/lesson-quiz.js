@@ -4,7 +4,7 @@ export const quizzes = {
  'py-first': {question:'price = 3, count = 2일 때 price * count는?', options:['5','6','32'], answer:1, explanation:'*는 곱셈이므로 3 × 2 = 6입니다.'},
  'py-list-index': {question:'values = [10, 20, 30]일 때 values[2]는?', options:['10','20','30'], answer:2, explanation:'인덱스는 0부터 시작하므로 2는 세 번째 위치입니다.'},
  'py-bool': {question:'True and False의 결과는?', options:['True','False'], answer:1, explanation:'and는 두 조건이 모두 참일 때만 참입니다.'},
- 'py-for': {question:'range(3)이 차례로 만드는 정수는?', options:['1, 2, 3','0, 1, 2','0, 1, 2, 3'], answer:1, explanation:'range(3)은 0부터 시작하며 끝인 3은 포함하지 않습니다.'},
+ 'py-for': {question:'values = [1, 2, 3]을 반복하면서 total = 0을 매 반복 안에서 실행하면 마지막 total은?', options:['3','6','0'], answer:0, explanation:'매번 누적값을 0으로 되돌리므로 마지막 원소 3만 남습니다.'},
  'containers': {question:'이름으로 값을 찾아 저장하기에 알맞은 자료형은?', options:['dict','tuple','숫자 하나'], answer:0, explanation:'dict는 키와 값을 연결하므로 이름으로 값을 찾을 수 있습니다.'},
  'py-classes': {question:'같은 클래스에서 만든 두 객체의 상태에 대한 설명으로 알맞은 것은?', options:['객체마다 다른 값을 가질 수 있다','항상 같은 값만 가진다'], answer:0, explanation:'각 객체는 자신의 인스턴스 속성을 가질 수 있습니다.'},
  'math-matrix-basics': {question:'shape가 (2, 3)인 행렬을 전치하면 shape는?', options:['(2, 3)','(3, 2)','(6, 1)'], answer:1, explanation:'전치는 행과 열을 바꾸므로 2행 3열이 3행 2열이 됩니다.'},

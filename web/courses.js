@@ -1,5 +1,6 @@
 import { cppReferences } from './cpp-reference.js';
 import { pythonReferences } from './python-reference.js';
+import { torchReferences } from './torch-reference-extra.js';
 
 export const courses = [
  {id:'python',name:'Python',description:'기초·함수·클래스·자료구조·탐색',location:'내 브라우저 · 노트북 CPU',detail:'설치 없이 Python·NumPy를 브라우저에서 실행합니다. 작은 행렬·자료구조 실습에 GPU는 필요하지 않습니다.'},
@@ -32,7 +33,7 @@ export function explanations(lesson) {
      seen.add(name); return true;
    });
  }
- const related = [...(lesson.explain || []), ...pythonReferences(lesson)];
+ const related = [...(lesson.explain || []), ...pythonReferences(lesson), ...torchReferences(lesson)];
  if (related.length) {
    const seen = new Set();
    return related.filter(([name]) => !seen.has(name) && seen.add(name));

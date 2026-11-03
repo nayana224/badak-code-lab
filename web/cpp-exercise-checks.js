@@ -5,6 +5,9 @@ import { cppExpansionChecks } from './cpp-expansion-support.js';
 const checks = {
  ...cppExpansionChecks,
  'cpp-function': `if (double_value(0) != 0 || double_value(-3) != -6 || double_value(5) != 10) return 1;`,
+ 'cpp-reference': `int a = -5, b = 7; increment(a); increment(b); if (a != 0 || b != 12) return 1;`,
+ 'cpp-template': `if (twice(0) != 0 || twice(-3) != -6 || twice(1.5) != 3.0) return 1;`,
+ 'cpp-concepts': `if (twice(0) != 0 || twice(-3) != -6 || twice(4u) != 8u) return 1;`,
  'cpp-vector': `if (sum({}) != 0 || sum({-2, 5, -1}) != 2 || sum({7}) != 7) return 1;`,
  'cpp-search': `if (binary_search({}, 4) != -1 || binary_search({1, 3, 5, 7}, 1) != 0 || binary_search({1, 3, 5, 7}, 7) != 3 || binary_search({1, 3, 5, 7}, 4) != -1) return 1;`,
  'project-cpp-summary': `

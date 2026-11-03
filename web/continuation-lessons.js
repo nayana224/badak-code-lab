@@ -417,7 +417,7 @@ export const continuationLessons = [
       ],
       [
         "learning_rate * w.grad",
-        "현재 위치에서 손실을 줄이는 방향으로 얼마나 이동할지 정합니다."
+        "기울기에 학습률을 곱한 값입니다. 현재 가중치에서 이 값을 빼 기울기의 반대 방향으로 갱신합니다."
       ],
       [
         "record(\"training\", ...)",

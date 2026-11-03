@@ -1,3 +1,4 @@
+import { torchReferenceExamples } from './torch-reference-extra.js';
 import { pythonLibraryExamples } from './python-library-lessons.js';
 import { shallowCopyExamples } from './shallow-copy-lesson.js';
 import { torchExpansionExamples } from './torch-expansion.js';
@@ -161,3 +162,8 @@ Object.assign(lessonReferenceExamples, {
 Object.assign(lessonReferenceExamples, shallowCopyExamples);
 
 Object.assign(lessonReferenceExamples, pythonLibraryExamples);
+Object.assign(lessonReferenceExamples, {
+ 'tensor.int()':'torch.tensor([1.2]).int()는 값을 32비트 정수 텐서 tensor([1], dtype=torch.int32)로 변환합니다.'
+});
+
+Object.assign(lessonReferenceExamples, torchReferenceExamples);

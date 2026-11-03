@@ -29,8 +29,8 @@ test('핵심 수업에는 오류 확인 안내가 있다',()=>{
  assert.match(commonError('cpp-search'),/left/);
  assert.equal(commonError('not-a-lesson'),'');
 });
-test('여러 입력 검사는 네 정답을 통과시키고 고정된 반환값은 거부한다',()=>{
- for(const id of ['cpp-function','cpp-vector','cpp-search','project-cpp-summary','cpp-exception-strong']) {
+test('여러 입력 검사는 정답을 통과시키고 고정된 반환값은 거부한다',()=>{
+ for(const id of ['cpp-function','cpp-reference','cpp-template','cpp-concepts','cpp-vector','cpp-search','project-cpp-summary','cpp-exception-strong']) {
   const lesson=lessons.find(l=>l.id===id);
   const code=lesson.solution || lesson.code;
   assert.equal(buildAndRun(cppExerciseCheck(id,code)),0,id);

@@ -6,6 +6,9 @@ export const cppExpansionQuizzes = {
  'cpp-exception-strong':{question:'values가 [3]이고 replace_first(values, -1)이 검증에 실패하면?',options:['예외가 나고 values는 [3]이다','values는 [-1]이 된다','values가 자동으로 비워진다'],answer:0,explanation:'음수는 값을 바꾸기 전에 예외를 던지므로 이 함수에서 기존 값 3이 유지됩니다.'}
 };
 export const cppExpansionExamples = {
+ '#include <numeric>':'합계 함수 std::accumulate를 사용하려면 <numeric> 헤더를 포함합니다.',
+ '#include <cassert>':'assert(2 + 2 == 4);는 조건을 검사합니다. NDEBUG가 정의되면 검사가 제거될 수 있습니다.',
+ 'unordered_map::at(key)':'counts.at("cat")은 기존 키 cat의 값을 읽습니다. 키가 없으면 out_of_range 예외가 발생합니다.',
  'lvalue와 prvalue':'int n = 4;에서 n은 lvalue, 정수 리터럴 7은 prvalue입니다.',
  'int&와 int&& 오버로드':'show(n)은 int& 버전, show(7)은 int&& 버전을 선택합니다.',
  '이름 붙은 int&&':'int&& ref = 5;에서 ref라는 이름을 쓴 표현식은 lvalue입니다.',

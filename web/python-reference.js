@@ -12,6 +12,7 @@ const entries = [
  [/\.mean\s*\(/,'mean()','선택한 원소 또는 축의 평균을 계산합니다.'],
  [/\.sum\s*\(/,'sum()','선택한 텐서 원소 또는 축의 합을 계산합니다.'],
  [/\.item\s*\(/,'item()','원소 하나를 가진 텐서에서 Python 숫자를 꺼냅니다.'],
+ [/\.int\s*\(/,'tensor.int()','텐서 원소를 32비트 정수 dtype으로 변환한 텐서를 반환합니다. Python 내장 int()와 별도 메서드입니다.'],
  [/\.tolist\s*\(/,'tolist()','텐서나 배열의 값을 Python 리스트로 변환합니다.'],
  [/\.backward\s*\(/,'backward()','계산 그래프를 따라 기울기를 계산해 .grad에 누적합니다.'],
  [/torch\.no_grad\s*\(/,'torch.no_grad()','블록 안에서 자동 미분을 위한 연산 기록을 끕니다.'],
@@ -29,12 +30,12 @@ const entries = [
  [/\breversed\s*\(/,'reversed(...)','순서를 거꾸로 순회하는 반복자를 만듭니다. 원본을 뒤집어 수정하지 않습니다.'],
  [/\blambda\b/,'lambda','이름 없이 짧은 함수를 만드는 표현식입니다. 호출할 때 표현식을 계산합니다.'],
  [/\.copy\s*\(/,'copy()','이 예제의 리스트를 얕게 복사하여 새 리스트를 만듭니다.'],
- [/\bint\s*\(/,'int(...)','값을 정수로 변환합니다. 변환할 수 없는 문자열은 ValueError가 납니다.'],
+ [/(?<![\w.])int\s*\(/,'int(...)','값을 Python 정수로 변환합니다. 변환할 수 없는 문자열은 ValueError가 납니다.'],
  [/\.strip\s*\(/,'strip()','문자열 양 끝의 공백을 제거한 새 문자열을 반환합니다.'],
- [/\.append\s*\(/,'append(value)','리스트의 끝에 원소를 추가합니다.'],
+ [/\.append\s*\(/,'append(value)','리스트 또는 deque의 끝에 원소 하나를 추가합니다. 이 수업에서는 호출한 객체가 직접 변경됩니다.'],
  [/\brecord\s*\(/,'record(...)','이 실습실의 시각화 도우미로 전달받은 실제 값을 기록합니다. Python이나 PyTorch 표준 함수는 아닙니다.']
 ];
 export function pythonReferences(lesson) {
  const code = lesson.solution || lesson.code || '';
- return entries.filter(([pattern]) => pattern.test(code)).map(([, name, description]) => [name, description]);
+ return entries.filter(([pattern, name]) => pattern.test(code) && (name !== 'tensor.int()' || lesson.runtime === 'torch')).map(([, name, description]) => [name, description]);
 }
