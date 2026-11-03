@@ -155,7 +155,7 @@ async function run(check=false) {
         const verifyResponse=await fetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json','X-Lab-Token':config.token},body:JSON.stringify({code:cppCheck,check:'',runtime:'cpp'}),signal:aborter.signal});
         const verification=await verifyResponse.json(); if(seq!==sequence) return;
         if(!verifyResponse.ok || verification.error || verification.returncode!==0) {
-          throw Error('추가 입력 검사에 실패했습니다. 참고 코드의 함수 이름과 인자를 유지하고 빈 입력·음수·찾지 못한 값도 확인하세요. '+(verification.error || (verification.stderr || '').slice(0,600)));
+          throw Error('추가 입력 검사에 실패했습니다. 참고 코드의 함수·클래스 이름과 인자를 유지하고 다른 입력과 경계 조건을 확인하세요. '+(verification.error || (verification.stderr || '').slice(0,600)));
         }
       }
       finish(check);
